@@ -10,6 +10,8 @@ media
 venv
 /static/
 
+.env 
+
 # Vue.js #
 /node_modules
 /dist
