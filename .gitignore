@@ -10,7 +10,7 @@ media
 venv
 /static/
 
-.env 
+.env
 
 # Vue.js #
 /node_modules

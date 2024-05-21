@@ -28,7 +28,11 @@
           <main>
             <div class="mx-auto max-w-screen p-4 md:p-6 2xl:p-10 mt-20">
               <!-- <slot></slot> -->
-              <router-view />
+              <main class="max-w-[1165px] mx-auto lg:mr-44">
+               
+                    <router-view /> 
+                  
+                </main>
             </div>
           </main>
           <!-- ===== Main Content End ===== -->

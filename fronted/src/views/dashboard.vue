@@ -1,5 +1,5 @@
 <template>
-  <main class="max-w-[1165px] mx-auto lg:mr-44">
+  
     <div class="lg:flex gap-16">
       <div class="flex-1 max-w-[1080px] mx-auto">
         <h3 class="dark:text-white font-bold capitalize mb-4 text-xl">
@@ -7,12 +7,17 @@
         </h3>
         <div class="flex mb-6">
           <div class="card flex justify-center gap-4">
-            <Button label="Home" severity="info" icon="pi pi-home" @click="updateTournaments('Feed')" />
-            <Button label="Location" severity="info" icon="pi pi-map-marker" @click="updateTournaments('Discover')" />
-            <Button label="Create" severity="info" icon="pi pi-folder-plus" @click="updateTournaments('Create')" />
+            <Button label="Tournaments" severity="info"  icon="pi pi-home" @click="updateTournaments('Feed')" />
+            <Button label="Discover" severity="info" icon="pi pi-map-marker" @click="updateTournaments('Discover')" />
+            <div>
+              <Toast position="bottom-right" group="br" />
+              <ConfirmDialog group="positioned"></ConfirmDialog>
+              <div>
+                <Button @click="confirmPosition('right')" label="Create" severity="info" icon="pi pi-folder-plus"></Button>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- Dynamically show component info based on the button calls. Tournaments should be the default component -->
         <component :is="currentComponent" />
       </div>
       <div class="2xl:w-[380px] lg:w-[430px] w-full">
@@ -25,23 +30,58 @@
         </div>
       </div>
     </div>
-  </main>
+
 </template>
 
 <script setup>
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import Create from '@/components/dahsboard/Create.vue';
   import Discover from '@/components/dahsboard/Discover.vue';
   import Feed from '@/components/dahsboard/Feed.vue';
   import LatestTournaments from '@/components/dahsboard/LatestTournaments..vue';
   import Tournaments from '@/components/dahsboard/Tournaments.vue';
   import UpcomingTournaments from '@/components/dahsboard/UpcomingTournaments.vue';
-  import { ref } from 'vue';
   import Button from 'primevue/button';
+  import { useConfirm } from "primevue/useconfirm";
+  import { useToast } from "primevue/usetoast";
+  import ConfirmDialog from 'primevue/confirmdialog';
 
 const componentsMap = {
   Feed,
   Discover,
   Create,
+};
+
+
+const confirm = useConfirm();
+const toast = useToast();
+const router = useRouter();
+
+const confirmPosition = (position) => {
+    confirm.require({
+        group: 'positioned',
+        message: 'Are you sure you want to proceed?',
+        header: 'Confirmation',
+        icon: 'pi pi-info-circle',
+        position: position,
+        rejectProps: {
+            label: 'Cancel',
+            severity: 'info',
+            text: true
+        },
+        acceptProps: {
+            label: 'Save',
+            text: true
+        },
+        accept: () => {
+          toast.add({ severity: 'info', summary: 'Success Message', detail: 'Message Content', group: 'br', life: 3000 });
+          router.push('/add-pool')
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'Process incomplete', group: 'br', life: 3000 });
+        }
+    });
 };
 
 const currentComponent = ref(Tournaments);

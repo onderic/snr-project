@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import User from '@/layouts/User.vue'
 import Dashboard from '@/views/dashboard.vue'
+import AddPool from "@/views/owner/AddPoool.vue"
+import Login from '@/views/auth/login.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,9 +18,21 @@ const router = createRouter({
           path: '/dashboard',
           name: 'dashboard',
           component: Dashboard
-        }
+        },
+        {
+          path: '/add-pool',
+          name: 'addpool',
+          component: AddPool
+        },
+        {
+          path: "/auth/login",
+          name: "login",
+          component: Login,
+        },
       ]
-    }
+    },
+    
+
     // {
     //   path: "/auth/register",
     //   name: "register",
