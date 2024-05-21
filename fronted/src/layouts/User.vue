@@ -1,11 +1,17 @@
 <template>
   <div>
+   
+
     <!-- Show loader if loading is true -->
     <div v-if="loading" class="flex justify-center items-center h-screen">
+      
       <div class="rounded-full h-20 w-20 bg-violet-800 animate-ping"></div>
     </div>
     <!-- Show layouts and router view if loading is false -->
     <div v-else>
+      <div class="card">
+      
+    </div>
       <!-- ===== Page Wrapper Start ===== -->
       <div class="flex h-screen overflow-hidden">
         <!-- ===== Sidebar Start ===== -->
@@ -36,6 +42,9 @@
 
 <script>
 import { ref } from 'vue'
+
+import ProgressBar from 'primevue/progressbar';
+
 import Sidebar from '@/components/Sidebar/Sidebar.vue'
 import HeaderArea from '@/components/Header/HeaderArea.vue'
 import { useRouter } from 'vue-router'

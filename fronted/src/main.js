@@ -7,14 +7,15 @@ import App from './App.vue'
 import router from './router'
 
 import PrimeVue from 'primevue/config';
-import Aura from '@/presets/aura';
-import 'primeicons/primeicons.css'; 
+import Lara from './presets/lara';
+import 'primeicons/primeicons.css'
+
 
 const app = createApp(App)
 
 app.use(PrimeVue, {
     unstyled: true,
-    pt: Aura
+    pt: Lara
 });
 
 app.use(createPinia())
