@@ -1,4 +1,7 @@
 <template>
+
+
+
     <div class="box p-5 dark:bg-slate-800 rounded-md">
         <div class="shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
           <div class="md:w-40 md:h-full w-full h-36 overflow-hidden">

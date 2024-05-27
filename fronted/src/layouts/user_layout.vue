@@ -25,16 +25,21 @@
           <!-- ===== Header End ===== -->
 
           <!-- ===== Main Content Start ===== -->
-          <main>
-            <div class="mx-auto max-w-screen p-4 md:p-6 2xl:p-10 mt-20">
               <!-- <slot></slot> -->
-              <main class="max-w-[1165px] mx-auto lg:mr-44">
-               
+              <main class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+                 <!-- timeline -->
+                <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto"  id="js-oversized">
+                  <div class="max-w-[680px] mx-auto">
+
+
+                  <!-- feed story -->
+                  <div class="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3 mt-28"></div>
+                            
                     <router-view /> 
                   
+                    </div>
+                    </div>
                 </main>
-            </div>
-          </main>
           <!-- ===== Main Content End ===== -->
           <!-- <footer-user /> -->
         </div>
@@ -47,9 +52,7 @@
 <script>
 import { ref } from 'vue'
 
-import ProgressBar from 'primevue/progressbar';
-
-import Sidebar from '@/components/Sidebar/Sidebar.vue'
+import Sidebar from '@/components/Sidebar/side_bar.vue'
 import HeaderArea from '@/components/Header/HeaderArea.vue'
 import { useRouter } from 'vue-router'
 

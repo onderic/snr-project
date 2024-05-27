@@ -1,10 +1,10 @@
 <template>
-  <aside
-    class="fixed top-16 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
-    :class="{ '-translate-x-full': !showSidebar, 'translate-x-0': showSidebar }"
+<aside
+  class="fixed top-0 left-0 z-[99] pt-[--m-top] overflow-hidden transition-transform xl:duration-500 max-xl:w-full max-xl:-translate-x-full"
+
   >
     <div
-      class="p-2 max-xl:bg-slate-700 dark:text-gray-400 shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:border-slate-700"
+    class="p-2 max-xl:bg-white shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700"
     >
       <div class="pr-4">
         <div id="side">
@@ -135,7 +135,6 @@
 <script>
 import { ref } from 'vue'
 
-import { useRouter } from 'vue-router'
 
 
 export default {
@@ -154,7 +153,7 @@ export default {
       dropdownOpen.value[id] = !dropdownOpen.value[id]
     }
 
-    const router = useRouter()
+    // const router = useRouter()
 
    
 
