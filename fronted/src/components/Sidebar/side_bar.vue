@@ -100,7 +100,7 @@
                     d="M9 5l7 7-7 7"
                   ></path>
                 </svg>
-                <span>Event</span>
+                <span>Event2</span>
               </a>
             </li>
             <li>
