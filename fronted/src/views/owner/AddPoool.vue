@@ -1,14 +1,14 @@
 <template>
+    <div class="container mb-10 w-full">
+      <AddPool/>
+      <MapComponent/>
+    </div>
+  </template>
+  
     
-        <Create/>
-    
- 
-</template>
-
 <script setup>
-import Create from '@/components/dahsboard/Create.vue';
+import MapComponent from '@/components/pool/PoolLocation.vue';
+import AddPool from '@/components/pool/AddPool.vue';
+
 </script>
-
-<style>
-
-</style>
+    

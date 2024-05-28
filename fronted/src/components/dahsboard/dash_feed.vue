@@ -31,7 +31,7 @@
         <hr class="card-list-divider" />
          <div class="shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
           <div class="md:w-40 md:h-full w-full h-36 overflow-hidden">
-            <img src="https://cdn.pixabay.com/photo/2020/08/15/03/19/billiards-5489526_1280.jpg" alt="Event Image" class="w-full h-full object-cover">
+            <img src="" alt="Event Image" class="w-full h-full object-cover">
           </div>
           <div class="md:flex gap-10 md:items-end flex-1 py-4 px-6">
             <div>

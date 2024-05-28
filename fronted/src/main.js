@@ -6,24 +6,20 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import PrimeVue from 'primevue/config';
-import Lara from './presets/lara';
-import 'primeicons/primeicons.css'
-import ConfirmationService from 'primevue/confirmationservice';
-import ToastService from 'primevue/toastservice';
-import Toast from 'primevue/toast';
+import plugin from 'vue-toastify';
+import 'vue-toastify/index.css';
 
 
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { CoHome,IoLocateOutline,IoCreateOutline,PxNext,CoLibraryAdd,IoCheckmarkDoneOutline } from "oh-vue-icons/icons";
+
+addIcons(CoHome,IoLocateOutline,IoCreateOutline,PxNext,CoLibraryAdd,IoCheckmarkDoneOutline);
 
 const app = createApp(App)
 
-app.use(PrimeVue, {
-    unstyled: true,
-    pt: Lara
-});
-app.use(ConfirmationService);
-app.use(ToastService);
-app.component('Toast', Toast);
+app.component("v-icon", OhVueIcon);
+
+app.use(plugin, {});
 
 app.use(createPinia())
 app.use(router)

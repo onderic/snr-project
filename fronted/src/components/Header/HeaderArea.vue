@@ -1,5 +1,5 @@
-<template lang="">
-  <div>
+<template >
+  <div class="mb-10">
     <div
       class="z-[100] h-[--m-top] fixed top-0 left-0 w-full flex items-center bg-white dark:bg-slate-800 sky-50 backdrop-blur-xl border-b border-slate-200 dark:bg-dark2 dark:border-slate-800"
     >

@@ -5,7 +5,7 @@
     <!-- Post heading -->
     <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
       <a href="timeline.html">
-        <img src="" alt="" class="w-9 h-9 rounded-full">
+        <img :src="imageSrc1" alt="" class="w-9 h-9 rounded-full">
       </a>
       <div class="flex-1">
         <a href="timeline.html">
@@ -32,14 +32,17 @@
     <!-- Buttons at far ends -->
     <div class="flex justify-between p-4">
       <button class="btn-primary"></button>
-      <button class="btn-secondary">More..</button>
+      <button class="btn">
+        <v-icon name="px-next" />
+        View
+      </button>
     </div>
   </div>
   <div class=" dark:bg-slate-800 rounded-xl shadow-sm text-sm font-medium   dark:text-white w-full">
     <!-- Post heading -->
     <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
       <a href="timeline.html">
-        <img src="" alt="" class="w-9 h-9 rounded-full">
+        <img :src="imageSrc1" alt="" class="w-9 h-9 rounded-full">
       </a>
       <div class="flex-1">
         <a href="timeline.html">
@@ -66,14 +69,17 @@
     <!-- Buttons at far ends -->
     <div class="flex justify-between p-4">
       <button class="btn-primary"></button>
-      <button class="btn-secondary">More..</button>
+      <button class="btn">
+        <v-icon name="px-next" />
+        View
+      </button>
     </div>
   </div>
   <div class=" dark:bg-slate-800 rounded-xl shadow-sm text-sm font-medium   dark:text-white w-full">
     <!-- Post heading -->
     <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
       <a href="timeline.html">
-        <img src="" alt="" class="w-9 h-9 rounded-full">
+        <img :src="imageSrc1" alt="" class="w-9 h-9 rounded-full">
       </a>
       <div class="flex-1">
         <a href="timeline.html">
@@ -100,7 +106,10 @@
     <!-- Buttons at far ends -->
     <div class="flex justify-between p-4">
       <button class="btn-primary"></button>
-      <button class="btn-secondary">More..</button>
+      <button class="btn">
+        <v-icon name="px-next" />
+        View
+      </button>
     </div>
   </div>  
 </div>
@@ -109,6 +118,12 @@
 
 <script setup>
 import GoogleMap from "@/components/dahsboard/show_map.vue"
+
+import { ref } from 'vue';
+import image1 from '@/assets/ball.jpeg';
+
+// Assign the imported images to refs
+const imageSrc1 = ref(image1);
 
 </script>
 

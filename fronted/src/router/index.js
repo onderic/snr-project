@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import User from '@/layouts/user_layout.vue'
-import Dashboard from '@/views/user_dashboard.vue'
+import User from '@/layouts/User.vue'
+import Dashboard from '@/views/Dashboard.vue'
 import AddPool from "@/views/owner/AddPoool.vue"
 import Login from '@/views/auth/login.vue'
 
@@ -20,7 +20,7 @@ const router = createRouter({
           component: Dashboard
         },
         {
-          path: '/add-pool',
+          path: '/add-pool/location',
           name: 'addpool',
           component: AddPool
         },
