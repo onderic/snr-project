@@ -117,7 +117,7 @@
 
 
 <script setup>
-import GoogleMap from "@/components/dahsboard/show_map.vue"
+import GoogleMap from "@/components/dahsboard/Map.vue"
 
 import { ref } from 'vue';
 import image1 from '@/assets/ball.jpeg';

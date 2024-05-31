@@ -3,6 +3,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import User from '@/layouts/User.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import AddPool from "@/views/owner/AddPoool.vue"
+
+
+// events
+import EventDetail from "@/views/owner/EventDetail.vue"
+
+
 import Login from '@/views/auth/login.vue'
 
 const router = createRouter({
@@ -24,6 +30,16 @@ const router = createRouter({
           name: 'addpool',
           component: AddPool
         },
+
+        // events
+        {
+          path:"/event-detail",
+          name: "event-detail",
+          component: EventDetail
+
+        },
+
+
         {
           path: "/auth/login",
           name: "login",

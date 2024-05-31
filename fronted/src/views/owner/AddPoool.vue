@@ -1,6 +1,5 @@
 <template>
     <div class="container mb-10 w-full">
-      <AddPool/>
       <MapComponent/>
     </div>
   </template>

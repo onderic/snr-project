@@ -1,6 +1,6 @@
 <template>
 <aside
-  class="fixed top-0 left-0 z-[99] pt-[--m-top] overflow-hidden transition-transform xl:duration-500 max-xl:w-full max-xl:-translate-x-full"
+  class="fixed top-0 left-0 z-[99] mt-20 pt-[--m-top] overflow-hidden transition-transform xl:duration-500 max-xl:w-full max-xl:-translate-x-full"
 
   >
     <div
@@ -8,7 +8,7 @@
     >
       <div class="pr-4">
         <div id="side">
-          <ul class="mt-20">
+          <ul class="">
             <li>
               <router-link  to="/dashboard">
               <a

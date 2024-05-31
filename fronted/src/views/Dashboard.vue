@@ -13,7 +13,7 @@
         </h3>
         <div class="flex mb-6">
           <div class="card flex justify-center gap-4">
-            <button  class="btn" @click="updateTournaments('Feed')" >
+            <button  class="btn" @click="updateTournaments('Tournaments')" >
               <v-icon name="co-home" /> Tournaments
             </button>
             <button class="btn" @click="updateTournaments('Discover')" >
@@ -60,16 +60,15 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Create from '@/components/dahsboard/Create.vue';
-import Discover from '@/components/dahsboard/dash_discover.vue';
-import Feed from '@/components/dahsboard/dash_feed.vue';
+import Discover from '@/components/dahsboard/Discover.vue';
 import LatestTournaments from '@/components/dahsboard/LatestTournaments..vue';
-import Tournaments from '@/components/dahsboard/dash_tournaments.vue';
+import Tournaments from '@/components/dahsboard/Tournaments.vue';
 import UpcomingTournaments from '@/components/dahsboard/UpcomingTournaments.vue';
 
 const componentsMap = {
-  Feed,
   Discover,
   Create,
+  Tournaments
 };
 
 
@@ -79,6 +78,7 @@ const notify = () => toastId.value = toast('Hello', {
   autoClose: false,
   position: toast.POSITION.BOTTOM_CENTER,
 });
+
 const update = () => toast.update(toastId.value, {
   type: toast.TYPE.INFO,
   autoClose: 5000,
