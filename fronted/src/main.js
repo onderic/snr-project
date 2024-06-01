@@ -8,6 +8,7 @@ import router from './router'
 
 import plugin from 'vue-toastify';
 import 'vue-toastify/index.css';
+import axios  from 'axios'
 
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
@@ -25,7 +26,8 @@ import { CoHome,
     MdDarkmode,
     FaSun,
     PxNotification,
-    CoUser
+    CoUser,
+    RiShareForwardFill
  } from "oh-vue-icons/icons";
 
 addIcons(CoHome,
@@ -43,8 +45,11 @@ addIcons(CoHome,
     MdDarkmode,
     FaSun,
     PxNotification,
-    CoUser
+    CoUser,
+    RiShareForwardFill
 );
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000/'
 
 const app = createApp(App)
 
@@ -53,6 +58,6 @@ app.component("v-icon", OhVueIcon);
 app.use(plugin, {});
 
 app.use(createPinia())
-app.use(router)
+app.use(router,axios)
 
 app.mount('#app')
