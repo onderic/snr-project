@@ -1,3 +1,4 @@
+import time
 from django.http import JsonResponse
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -11,10 +12,11 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def user(request):
+    # time.sleep(5)
     return JsonResponse({
         'id': request.user.id,
-        'name': request.user.name,
-        'email': request.user.email,
+        'username': request.user.username,
+        'role': request.user.role,
     })
 
 
@@ -27,12 +29,12 @@ def register_user(request):
 
     if form.is_valid():
         email = form.cleaned_data.get('email')
-        name = form.cleaned_data.get('name')
+        username = form.cleaned_data.get('username')
 
         if User.objects.filter(email=email).exists():
             return Response({'message': 'error', 'error': 'Email is already taken'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if User.objects.filter(name=name).exists():
+        if User.objects.filter(username=username).exists():
             return Response({'message': 'error', 'error': 'Username is already taken'}, status=status.HTTP_400_BAD_REQUEST)
 
         form.save()
