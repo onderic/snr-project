@@ -27,7 +27,9 @@ import { CoHome,
     FaSun,
     PxNotification,
     CoUser,
-    RiShareForwardFill
+    RiShareForwardFill,
+    GiSpinningBlades,
+    MdLogin
  } from "oh-vue-icons/icons";
 
 addIcons(CoHome,
@@ -46,10 +48,12 @@ addIcons(CoHome,
     FaSun,
     PxNotification,
     CoUser,
-    RiShareForwardFill
+    RiShareForwardFill,
+    GiSpinningBlades,
+    MdLogin
 );
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/'
+axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
 
 const app = createApp(App)
 

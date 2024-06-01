@@ -117,18 +117,20 @@
               </ul>
           </div>
         <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
-          <h1 class="mb-3 font-semibold ">User</h1>
+          <h1 class="mb-3 font-semibold ">User, {{ userStore.user.username }}</h1>
               <ul>
                 <li>
-              <router-link  to="/dashboard">
-              <a
-                href="#"
-                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
-              >
-              <v-icon name="hi-login"  scale="1.5" class="darkt:text-white" /> 
-                <span>Logout</span>
-              </a>
-              </router-link>
+                  <a v-if="isAuthenticated" @click.prevent="handleLogout" class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white">
+                    <v-icon name="hi-login"  scale="1.5" class="darkt:text-white" /> 
+                  <span>Logout</span>
+                </a>
+
+                 <router-link v-else to="/auth/login" class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white">
+                  <v-icon name="md-login"  scale="1.5" class="darkt:text-white" /> 
+                  <span>Login</span>
+                </router-link>
+                    
+      
             </li>
            
               <li>
@@ -150,41 +152,22 @@
   </aside>
 </template>
 
-<script>
-import { ref } from 'vue'
 
+<script setup>
+  import { computed } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useUserStore } from '@/stores/user';
+  import { useToast } from 'vue-toastify';
 
+  const router = useRouter();
+  const userStore = useUserStore();
+  const toast = useToast();
 
-export default {
-  props: {
-    showSidebar: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup() {
-    const dropdownOpen = ref({
-      dropdwon: false
-    })
+  const isAuthenticated = computed(() => userStore.user.isAuthenticated);
 
-    const toggleDropdown = (id) => {
-      dropdownOpen.value[id] = !dropdownOpen.value[id]
-    }
-
-    // const router = useRouter()
-
-   
-
-    // const logout = () => {
-    //   userStore.logout();
-    //   router.push({ name: 'login' });
-    //   toast.info('You have logged out');
-    // }
-
-    return {
-      dropdownOpen,
-      toggleDropdown
-    }
-  }
-}
+  const handleLogout = () => {
+    userStore.removeToken();
+    toast.success('Logged out successfully!');
+    router.push('/dashboard');
+  };
 </script>
