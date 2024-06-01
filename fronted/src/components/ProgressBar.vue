@@ -1,26 +1,30 @@
 <template>
-    <div v-if="loading" class="progress-bar-container mt-10">
-      <div class="progress-bar"></div>
-    </div>
-  </template>
-  
+  <div v-if="loading" class="progress-bar-container">
+    <div class="progress-bar"></div>
+  </div>
+</template>
 
-<script lang="ts" setup>
+<script setup>
 
-const props = defineProps<{
-  loading: boolean
-}>()
 
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    required: true
+  }
+})
 </script>
 
-
-<style scoped>
+<style>
 .progress-bar-container {
+  position: fixed;
+  top: 64px; 
+  left: 0;
   width: 100%;
-  height: 4px;
+  height: 4px; 
   background-color: #f3f3f3;
   overflow: hidden;
-  position: relative;
+  z-index: 9999;
 }
 
 .progress-bar {

@@ -7,28 +7,16 @@
     class="p-2 max-xl:bg-white shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700"
     >
       <div class="pr-4">
-        <div id="side">
-          <ul class="">
-            <li>
+        <div >
+          
+          <ul>
+            <li class="active">
               <router-link  to="/dashboard">
               <a
                 href="#"
-                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg bg-blue-500 text-white dark:bg-blue-600 dark:text-white"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 19l-7-7 7-7"
-                  ></path>
-                </svg>
+              <v-icon name="co-home" scale="1.5" />
                 <span>Feed</span>
               </a>
               </router-link>
@@ -38,73 +26,12 @@
                 href="messages.html"
                 class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  ></path>
-                </svg>
+              
                 <span>Messages</span>
               </a>
             </li>
-            <li>
-              <a
-                href="video.html"
-                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 2l8 5-8 5V2z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <span>Video</span>
-              </a>
-            </li>
-            <li class="active">
-              <a
-                href="event.html"
-                class="flex items-center space-x-2 py-2 px-4 rounded-lg bg-blue-500 text-white dark:bg-blue-600 dark:text-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  ></path>
-                </svg>
-                <span>Event2</span>
-              </a>
-            </li>
+         
+          
             <li>
               <a
                 href="pages.html"
@@ -127,8 +54,97 @@
                 <span>Pages</span>
               </a>
             </li>
+            
           </ul>
+          
         </div>
+        <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
+            <h1 class="mb-3 font-semibold ">Administrator</h1>
+              <ul>
+                <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600  text-sm dark:text-white"
+              >
+              <v-icon name="hi-solid-users"  scale="1.5" class="darkt:text-white" /> 
+                <span>Manage Owners</span>
+              </a>
+              </router-link>
+            </li>
+           
+              <!-- <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600  text-sm dark:text-white"
+              >
+              <v-icon name="fc-calendar"  scale="1.5" class="darkt:text-white" /> 
+                <span>Manage Events</span>
+              </a>
+              </router-link>
+            </li> -->
+           
+              </ul>
+          </div>
+        <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
+            <h1 class="mb-3 font-semibold ">Owner</h1>
+              <ul>
+                <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600  text-sm dark:text-white"
+              >
+              <v-icon name="ci-color-pot"  scale="1.5" class="darkt:text-white" /> 
+                <span>Manage Pool Space</span>
+              </a>
+              </router-link>
+            </li>
+           
+              <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600  text-sm dark:text-white"
+              >
+              <v-icon name="fc-calendar"  scale="1.5" class="darkt:text-white" /> 
+                <span>Manage Events</span>
+              </a>
+              </router-link>
+            </li>
+           
+              </ul>
+          </div>
+        <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
+          <h1 class="mb-3 font-semibold ">User</h1>
+              <ul>
+                <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
+              >
+              <v-icon name="hi-login"  scale="1.5" class="darkt:text-white" /> 
+                <span>Logout</span>
+              </a>
+              </router-link>
+            </li>
+           
+              <li>
+              <router-link  to="/dashboard">
+              <a
+                href="#"
+                class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-600 font-bold text-sm dark:text-white"
+              >
+              <v-icon name="fc-settings"  scale="1.5" class="darkt:text-white" /> 
+                <span>Settings</span>
+              </a>
+              </router-link>
+            </li>
+           
+              </ul>
+          </div>
       </div>
     </div>
   </aside>

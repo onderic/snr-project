@@ -13,6 +13,7 @@
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.79",
     "@vueuse/core": "^10.9.0",
+    "flowbite": "^2.3.0",
     "leaflet": "^1.9.4",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.1.7",

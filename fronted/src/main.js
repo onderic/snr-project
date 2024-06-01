@@ -11,9 +11,40 @@ import 'vue-toastify/index.css';
 
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { CoHome,IoLocateOutline,IoCreateOutline,PxNext,CoLibraryAdd,IoCheckmarkDoneOutline,FcInfo } from "oh-vue-icons/icons";
+import { CoHome,
+    IoLocateOutline,
+    IoCreateOutline,
+    PxNext,CoLibraryAdd,
+    IoCheckmarkDoneOutline,
+    FcInfo,
+    FcCalendar,
+    HiSolidUsers,
+    CiColorPot,
+    HiLogin,
+    FcSettings,
+    MdDarkmode,
+    FaSun,
+    PxNotification,
+    CoUser
+ } from "oh-vue-icons/icons";
 
-addIcons(CoHome,IoLocateOutline,IoCreateOutline,PxNext,CoLibraryAdd,IoCheckmarkDoneOutline,FcInfo);
+addIcons(CoHome,
+    IoLocateOutline
+    ,IoCreateOutline,
+    PxNext,
+    CoLibraryAdd,
+    IoCheckmarkDoneOutline,
+    FcInfo,
+    FcCalendar,
+    HiSolidUsers,
+    CiColorPot,
+    HiLogin,
+    FcSettings,
+    MdDarkmode,
+    FaSun,
+    PxNotification,
+    CoUser
+);
 
 const app = createApp(App)
 
