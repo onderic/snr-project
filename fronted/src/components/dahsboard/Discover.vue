@@ -1,12 +1,12 @@
 <template>
   <div class="flex-col space-y-6 bg-slate-600 p-5 rounded-md">
     <h1 class="font-semibold text-2xl capitalize dark:text-white">Discover pool spaces around you</h1>
-    <div >
+    <div>
       <div v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="dark:bg-slate-800 mb-5 rounded-xl shadow-sm text-sm font-medium dark:text-white w-full">
         <!-- Post heading -->
         <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
           <a :href="'/profile/' + poolSpace.user.id">
-            <img :src="poolSpace.user.profile_picture" alt="" class="w-9 h-9 rounded-full">
+            <img src="@/assets/ball.jpeg " alt="" class="w-9 h-9 rounded-full">
           </a>
           <div class="flex-1">
             <a :href="'/profile/' + poolSpace.user.id">
@@ -28,17 +28,8 @@
           </div>
         </a>
 
-        <!-- Buttons at far ends -->
-        <div class="flex justify-between p-4">
-          {{ poolSpace.latitude }},
-          {{ poolSpace.longitude }}
-          <button class="btn">
-            <v-icon name="px-next" />
-            View
-          </button>
-        </div>
+     
       </div>
-   
     </div>
   </div>
 </template>
