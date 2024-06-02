@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def user(request):
-    # time.sleep(5)
+    time.sleep(2)
     return JsonResponse({
         'id': request.user.id,
         'username': request.user.username,

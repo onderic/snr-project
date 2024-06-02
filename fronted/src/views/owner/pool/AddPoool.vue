@@ -1,5 +1,5 @@
 <template>
-    <div class="container mb-10 w-full">
+    <div class="container mb-10 w-full border-spacing-2 border mt-10 p-5 rounded-lg ">
       <MapComponent/>
     </div>
   </template>

@@ -8,9 +8,11 @@
               <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">  Connect with other players and pool owners to enhance your gaming experience! 
                     Discover new strategies, find teammates, and create lasting gaming friendships.
                     Join a vibrant community of players passionate about your favorite games.</p>
-              <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Experience more here
-                  <v-icon name="ri-share-forward-fill" scale="3"  /> 
-              </a>
+                    <router-link to="/dashboard">
+            <a  class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Experience more here
+                <v-icon name="ri-share-forward-fill" scale="3"  /> 
+            </a>
+        </router-link>
           </div>
           <div>
               <div class="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800">
@@ -46,7 +48,7 @@
                            Register 
                           </button>
                       <div class="text-sm font-medium text-gray-900 dark:text-white">
-                          Not registered yet? <router-link to="/auth/register"> <a class="text-blue-600 hover:underline dark:text-blue-500">Create account</a></router-link>
+                          Not registered yet? <router-link to="/auth/login"> <a class="text-blue-600 hover:underline dark:text-blue-500">login</a></router-link>
                       </div>
                   </form>
               </div>

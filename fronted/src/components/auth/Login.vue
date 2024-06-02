@@ -6,11 +6,13 @@
         <div class="flex flex-col justify-center">
             <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Join to elavete your pool game🎱</h1>
             <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">  Connect with other players and pool owners to enhance your gaming experience! 
-  Discover new strategies, find teammates, and create lasting gaming friendships.
-  Join a vibrant community of players passionate about your favorite games.</p>
-            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Experience more here
+            Discover new strategies, find teammates, and create lasting gaming friendships.
+            Join a vibrant community of players passionate about your favorite games.</p>
+            <router-link to="/dashboard">
+            <a  class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Experience more here
                 <v-icon name="ri-share-forward-fill" scale="3"  /> 
             </a>
+        </router-link>
         </div>
         <div>
             <div class="w-full lg:max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow-xl dark:bg-gray-800">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div  class="w-full">
       <ol class="flex items-center w-full mb-4 sm:mb-5 mt-16">
       <li class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800">
@@ -18,7 +18,6 @@
           </div>
       </li>
   </ol>
-  <form action="#">
       <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white capitalize">Pool registration here</h3>
       <div class="grid gap-4 mb-4 sm:grid-cols-2">
           <div>
@@ -38,7 +37,6 @@
           </div>
       </div>
       
-  </form>
   </div>
   
     <div class="mt-10">
@@ -59,7 +57,8 @@
   
       </div>
     </div>
-    <button type="submit" class="btn">
+    <button @click="submitForm" type="submit" class="btn">
+      <v-icon v-if="loading" name="gi-spinning-blades" animation="spin"  scale="1"/> 
          Submit 
       </button>
   </div>
@@ -70,6 +69,9 @@
   import { onMounted, ref, onUnmounted } from 'vue';
   import L from 'leaflet';
   import { useToast } from 'vue-toastify';
+  import { useUserStore } from '@/stores/user';
+  import axios from 'axios';
+  import { useLoading } from '@/composables/loading'
   
   const lat = ref(0);
   const lng = ref(0);
@@ -77,6 +79,10 @@
   const map = ref(null);
   const mapContainer = ref(null);
   const toast = useToast();
+  const userStore = useUserStore();
+
+  const loading = useLoading()
+
   
   function getLocation() {
     if (navigator.geolocation) {
@@ -125,6 +131,35 @@
     } catch (error) {
       console.error('Error fetching address:', error);
       address.value = 'Unable to fetch address';
+    }
+  }
+
+  async function submitForm() {
+    try {
+      loading.value = true
+      const formData = {
+        title: title.value,
+        email: email.value,
+        number: number.value,
+        height: height.value,
+      };
+      const data = {
+        ...formData,
+        latitude: lat.value,
+        longitude: lng.value,
+        address: address.value,
+        user: userStore.user.id
+      };
+      console.log(data)
+      const response = await axios.post('create-pool/', data);
+      console.log('Response:', response.data);
+      toast.success('Pool space  created successfully pending approval');
+   
+    } catch (error) {
+      console.error('Error creating event:', error);
+      toast.error('something went wrong');
+    }finally{
+      loading.value = false
     }
   }
   

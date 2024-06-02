@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import User from '@/layouts/User.vue'
 import Dashboard from '@/views/Dashboard.vue'
-import AddPool from "@/views/owner/AddPoool.vue"
+import AddPool from "@/views/owner/pool/AddPoool.vue"
 
 
 // events
-import EventDetail from "@/views/owner/EventDetail.vue"
+import Manage from "@/views/owner/events/ManageEvents.vue"
+import ManagePool from "@/views/owner/pool/ManagePool.vue"
+import EventDetail from "@/views/owner/events/EventDetail.vue"
 
 
 import Login from '@/views/auth/login.vue'
@@ -34,11 +36,26 @@ const router = createRouter({
 
         // events
         {
+          path:"/manage-events",
+          name: "manage-events",
+          component: Manage
+
+        },
+        {
           path:"/event-detail",
           name: "event-detail",
           component: EventDetail
 
         },
+
+        // pools
+        {
+          path:"/manage-pool",
+          name: "manage-pool",
+          component: ManagePool
+
+        },
+
 
 
       

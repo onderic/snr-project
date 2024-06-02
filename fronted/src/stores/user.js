@@ -25,7 +25,7 @@ export const useUserStore = defineStore({
         this.user.username = localStorage.getItem('user.username');
         this.user.isAuthenticated = true;
 
-        this.refreshToken();
+        // this.refreshToken();
       }
     },
 

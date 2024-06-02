@@ -9,6 +9,7 @@ import router from './router'
 import plugin from 'vue-toastify';
 import 'vue-toastify/index.css';
 import axios  from 'axios'
+import { useUserStore } from './stores/user';
 
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
@@ -29,7 +30,8 @@ import { CoHome,
     CoUser,
     RiShareForwardFill,
     GiSpinningBlades,
-    MdLogin
+    MdLogin,
+    PxCheckboxOn
  } from "oh-vue-icons/icons";
 
 addIcons(CoHome,
@@ -50,7 +52,8 @@ addIcons(CoHome,
     CoUser,
     RiShareForwardFill,
     GiSpinningBlades,
-    MdLogin
+    MdLogin,
+    PxCheckboxOn
 );
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
@@ -65,3 +68,6 @@ app.use(createPinia())
 app.use(router,axios)
 
 app.mount('#app')
+
+const userStore = useUserStore();
+userStore.initStore();
