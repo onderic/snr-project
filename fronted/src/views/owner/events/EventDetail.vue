@@ -1,5 +1,5 @@
 <template>
- <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-20">
+ <div v-if="event" class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-20">
 
     <div >
 
@@ -29,8 +29,8 @@
                     <div class="flex lg:items-center justify-between max-lg:flex-col max-lg:gap-2">
 
                         <div class="flex-1"> 
-                            <p class="text-sm font-semibold text-rose-600 mb-1.5"> 7 OCT AT 07:00 – 11 OCT AT 12:00 </p>
-                            <h3 class="md:text-2xl text-base font-bold text-black dark:text-white"> Webinar - Raising Ducks For Egg Production </h3>
+                            <p class="text-sm font-semibold text-rose-600 mb-1.5"> {{ event.start_time }} – {{ event.end_time }} </p>
+                            <h3 class="md:text-2xl text-base font-bold text-black dark:text-white">{{ event.title }} </h3>
                             <p class="font-normal text-gray-500 mt-2 flex gap-2 dark:text-white/80">
                                 <span> Free </span>
                                 <span> • </span>
@@ -39,26 +39,7 @@
                         </div>
 
                         <div>
-                            <div uk-countdown="date: 2024-01-01T08:36:57+00:00" class="flex gap-3 text-2xl font-semibold text-primary dark:text-white max-lg:justify-center uk-countdown">
-
-                                <div class="bg-primary-soft/40 flex flex-col items-center justify-center rounded-lg w-16 h-16 lg:border-4 border-white md:shadow dark:border-slate-700">
-                                    <span class="uk-countdown-days"><span>0</span><span>0</span></span> 
-                                    <span class="inline-block text-xs">Days</span>
-                                </div>
-                                <div class="bg-primary-soft/40 flex flex-col items-center justify-center rounded-lg w-16 h-16 lg:border-4 border-white md:shadow dark:border-slate-700">
-                                    <div class="uk-countdown-hours"><span>0</span><span>0</span></div> 
-                                    <span class="inline-block text-xs">Hours</span>
-                                </div>
-                                <div class="bg-primary-soft/40 flex flex-col items-center justify-center rounded-lg w-16 h-16 lg:border-4 border-white md:shadow dark:border-slate-700">
-                                    <div class="uk-countdown-minutes"><span>0</span><span>0</span></div> 
-                                    <span class="inline-block text-xs">min </span>
-                                </div>
-                                <div class="bg-primary-soft/40 flex flex-col items-center justify-center rounded-lg w-16 h-16 lg:border-4 border-white md:shadow dark:border-slate-700">
-                                    <div class="uk-countdown-seconds"><span>0</span><span>0</span></div> 
-                                    <span class="inline-block text-xs">sec </span>
-                                </div>
-
-                            </div>
+                            <Counter/>
                         </div>
 
                     </div>
@@ -103,8 +84,7 @@
                     <h3 class="font-semibold text-lg text-black dark:text-white"> About </h3>
                 
                     <div class="space-y-4 leading-7 tracking-wide mt-4 text-black text-sm dark:text-white"> 
-                        <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat</p>
-                        <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat</p>
+                        <p>{{ event.description }}</p>
                     </div> 
 
                 </div>  
@@ -291,9 +271,27 @@
 </div>
 </template>
 
-<script>
-export default {
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRoute } from 'vue-router';
+import Counter from '@/components/pool/CountDown.vue'
 
+const event = ref(null);
+const route = useRoute();
+
+onMounted(() => {
+  const eventId = route.params.id;
+  fetchEvent(eventId);
+});
+
+async function fetchEvent(eventId) {
+  try {
+    const response = await axios.get(`events/${eventId}`);
+    event.value = response.data;
+  } catch (error) {
+    console.error('Error fetching event details:', error.message);
+  }
 }
 </script>
 

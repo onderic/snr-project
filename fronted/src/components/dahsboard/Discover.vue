@@ -1,12 +1,16 @@
 <template>
-  <div  class="flex-col space-y-6 dark:bg-slate-800 bg-white p-5 rounded-md">
+  <div class="flex-col space-y-6 dark:bg-slate-800 bg-white p-5 rounded-md">
     <h1 class="font-semibold text-2xl capitalize dark:text-white">Discover pool spaces around you</h1>
-    <div>
-      <div v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="dark:bg-slate-700  mb-5 rounded-xl shadow-xl text-sm font-medium dark:text-white w-full">
-        <!-- Post heading -->
+    <div v-if="loading">
+   <Pool/>
+
+    </div>
+
+    <div v-else>
+      <div v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="dark:bg-slate-700 mb-5 rounded-xl shadow-xl text-sm font-medium dark:text-white w-full">
         <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
           <a :href="'/profile/' + poolSpace.user.id">
-            <img src="@/assets/ball.jpeg " alt="" class="w-9 h-9 rounded-full">
+            <img src="@/assets/ball.jpeg" alt="" class="w-9 h-9 rounded-full">
           </a>
           <div class="flex-1">
             <a :href="'/profile/' + poolSpace.user.id">
@@ -20,18 +24,14 @@
             </button>
           </div>
         </div>
-
-        <!-- map image -->
-          <div class="sm:rounded-lg w-full h-full object-cover p-4">
-            <GoogleMap :latitude="poolSpace.latitude" :longitude="poolSpace.longitude" />
-          </div>
-
-
-     
+        <div class="sm:rounded-lg w-full h-full object-cover p-4">
+          <GoogleMap :latitude="poolSpace.latitude" :longitude="poolSpace.longitude" />
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 
 
 <script setup>
@@ -40,6 +40,7 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useLoading } from '@/composables/loading';
 import { useToast } from 'vue-toastify';
+import Pool from '@/components/Skeleton/Pool.vue';
 
 const poolSpaces = ref([]);
 const loading = useLoading();

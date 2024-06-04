@@ -4,17 +4,18 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import PoolForm
-from .serializer import PoolSpaceSerializer
-from .models import PoolSpace
+from .serializers import PoolSpaceSerializer,TournamentSerializer
+from .models import PoolSpace,Tournament
 from rest_framework.permissions import AllowAny
 from math import radians, cos, sin, sqrt, atan2
 from geopy.distance import geodesic
+from accounts.models import User
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
-    time.sleep(4)
+    time.sleep(2)
     user_lat = request.query_params.get('latitude')
     user_lng = request.query_params.get('longitude')
 
@@ -47,9 +48,57 @@ def pool_spaces(request):
 @authentication_classes([])
 @permission_classes([])
 def create_pool_space(request):
-    time.sleep(5)
+    time.sleep(2)
     serializer = PoolSpaceSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# tournaments
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def create_tournament(request):
+    serializer = TournamentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def owner_event(request,user_id):
+    user = User.objects.get(pk=user_id)
+    events = Tournament.objects.filter(organizer=user).order_by('-created_at')
+    serializer = TournamentSerializer(events, many=True)
+
+    return Response(serializer.data)
+
+# puplic
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def events(request):
+    time.sleep(2)
+    events = Tournament.objects.all().order_by('-created_at')[:10]
+    serializer = TournamentSerializer(events, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_one_event(request, event_id):
+    try:
+        event = Tournament.objects.get(id=event_id)
+    except Tournament.DoesNotExist:
+        return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = TournamentSerializer(event)
+    return Response(serializer.data)
+
+

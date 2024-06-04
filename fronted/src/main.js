@@ -34,7 +34,11 @@ import { CoHome,
     PxCheckboxOn,
     IoCloseSharp,
     IoExpandSharp,
-    BiSunFill
+    BiSunFill,
+    FcHome,
+    CoEventbrite,
+    HiStatusOffline,
+    BiImageFill
  } from "oh-vue-icons/icons";
 
 addIcons(CoHome,
@@ -59,7 +63,11 @@ addIcons(CoHome,
     PxCheckboxOn,
     IoCloseSharp,
     IoExpandSharp,
-    BiSunFill
+    BiSunFill,
+    FcHome,
+    CoEventbrite,
+    HiStatusOffline,
+    BiImageFill
 );
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'

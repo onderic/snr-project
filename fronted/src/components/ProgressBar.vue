@@ -5,14 +5,13 @@
 </template>
 
 <script setup>
-
-
+// eslint-disable-next-line no-unused-vars
 const props = defineProps({
   loading: {
     type: Boolean,
     required: true
   }
-})
+});
 </script>
 
 <style>

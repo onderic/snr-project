@@ -19,11 +19,11 @@ class PoolSpace(models.Model):
 class Tournament(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.CharField(max_length=255)
+    end_time = models.CharField(max_length=255)
     organizer = models.ForeignKey(User, related_name='organized_tournaments', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, related_name='tournaments_attending', blank=True)
-    pool_space = models.ForeignKey(PoolSpace, related_name='tournaments', on_delete=models.CASCADE)
+    # pool_space = models.ForeignKey(PoolSpace, related_name='tournaments', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=50, choices=[('upcoming', 'Upcoming'), ('ongoing', 'Ongoing'), ('past', 'Past')], default='upcoming')
@@ -31,14 +31,14 @@ class Tournament(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self, *args, **kwargs):
-        if self.end_time < timezone.now():
-            self.status = 'past'
-        elif self.start_time <= timezone.now() <= self.end_time:
-            self.status = 'ongoing'
-        else:
-            self.status = 'upcoming'
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.end_time < timezone.now():
+    #         self.status = 'past'
+    #     elif self.start_time <= timezone.now() <= self.end_time:
+    #         self.status = 'ongoing'
+    #     else:
+    #         self.status = 'upcoming'
+    #     super().save(*args, **kwargs)
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
