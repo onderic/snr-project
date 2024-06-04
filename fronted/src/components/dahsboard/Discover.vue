@@ -1,8 +1,8 @@
 <template>
-  <div class="flex-col space-y-6 bg-slate-600 p-5 rounded-md">
+  <div  class="flex-col space-y-6 dark:bg-slate-800 bg-white p-5 rounded-md">
     <h1 class="font-semibold text-2xl capitalize dark:text-white">Discover pool spaces around you</h1>
     <div>
-      <div v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="dark:bg-slate-800 mb-5 rounded-xl shadow-sm text-sm font-medium dark:text-white w-full">
+      <div v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="dark:bg-slate-700  mb-5 rounded-xl shadow-xl text-sm font-medium dark:text-white w-full">
         <!-- Post heading -->
         <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
           <a :href="'/profile/' + poolSpace.user.id">
@@ -21,12 +21,11 @@
           </div>
         </div>
 
-        <!-- Post image -->
-        <a href="#preview_modal">
+        <!-- map image -->
           <div class="sm:rounded-lg w-full h-full object-cover p-4">
             <GoogleMap :latitude="poolSpace.latitude" :longitude="poolSpace.longitude" />
           </div>
-        </a>
+
 
      
       </div>
@@ -34,29 +33,62 @@
   </div>
 </template>
 
+
 <script setup>
 import GoogleMap from "@/components/dahsboard/Map.vue";
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useLoading } from '@/composables/loading';
+import { useToast } from 'vue-toastify';
 
 const poolSpaces = ref([]);
 const loading = useLoading();
+const toast = useToast()
 
-async function getPoolSpaces() {
+const defaultLatitude = 1.3028463; 
+const defaultLongitude = 36.5355534;
+
+async function getPoolSpaces(latitude, longitude) {
   try {
     loading.value = true;
-    const response = await axios.get('pools/');
+    const response = await axios.get('/pools/', {
+      params: {
+        latitude: latitude,
+        longitude: longitude
+      }
+    });
     poolSpaces.value = response.data;
   } catch (error) {
     console.error('Error fetching pool spaces:', error.message);
+    toast.error('Error fetching pool spaces.');
   } finally {
     loading.value = false;
   }
 }
 
+function getUserLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        getPoolSpaces(latitude, longitude);
+      },
+      error => {
+        console.error('Error getting user location:', error.message);
+        toast.error('Location access denied by user.');
+        getPoolSpaces(defaultLatitude, defaultLongitude);
+      }
+    );
+  } else {
+    console.error('Geolocation is not supported by this browser.');
+    toast.error('Geolocation is not supported by this browser.');
+    getPoolSpaces(defaultLatitude, defaultLongitude);
+  }
+}
+
 onMounted(() => {
-  getPoolSpaces();
+  getUserLocation();
 });
 </script>
 

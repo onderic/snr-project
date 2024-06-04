@@ -1,6 +1,9 @@
 <template>
-    <div class="container mb-10 w-full border-spacing-2 border mt-10 p-5 rounded-lg ">
+    <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-10">
+ <!-- component -->
+    <div class="sm:px-6 w-full">
       <MapComponent/>
+    </div>
     </div>
   </template>
   

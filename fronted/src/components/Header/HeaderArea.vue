@@ -43,20 +43,23 @@
             <div
               class="flex items-center sm:gap-4 gap-2 absolute right-5 top-1/2 -translate-y-1/2 text-black"
             >
-              <!-- create -->
-              <button
+              <!-- theme -->
+              <DarkModeSwitcher/>
+              <!-- <button
                 type="button"
                 class="sm:p-2 p-1 rounded-full relative sm:bg-gray-100 dark:bg-slate-900 dark:text-white"
               >
               <v-icon name="md-darkmode" scale="1.5" />
-                <ion-icon name="add-circle-outline" class="sm:hidden text-2xl"></ion-icon>
-              </button>
+              <v-icon name="bi-sun-fill" scale="1.5" />
+              
+              </button> -->
 
               <!-- notification -->
               <DropdownNotification/>
 
               <!-- profile -->
               <DropdownUser/>
+             
             </div>
           </div>
         </div>
@@ -66,7 +69,7 @@
 </template>
 <script setup>
 
-// import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher.vue'
+import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher.vue'
 // import DropdownMessage from '@/components/Header/DropdownMessage.vue'
 import DropdownNotification from '@/components/Header/DropdownNotification.vue'
 import DropdownUser from '@/components/Header/DropdownUser.vue'

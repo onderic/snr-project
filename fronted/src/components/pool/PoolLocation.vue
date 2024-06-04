@@ -1,7 +1,7 @@
 <template>
-  <div >
-    <div  class="w-full">
-      <ol class="flex items-center w-full mb-4 sm:mb-5 mt-16">
+  <div  class="w-full  dark:bg-slate-800 bg-white p-5 rounded-md">
+    <div >
+      <ol class="flex items-center w-full mb-4 sm:mb-5">
       <li class="flex w-full items-center text-blue-600 dark:text-blue-500 after:content-[''] after:w-full after:h-1 after:border-b after:border-blue-100 after:border-4 after:inline-block dark:after:border-blue-800">
           <div class="flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full lg:h-12 lg:w-12 dark:bg-blue-800 shrink-0">
               <v-icon name="co-library-add"   scale=""/> 
@@ -40,12 +40,12 @@
   </div>
   
     <div class="mt-10">
-      <h1 class="dark:text-white text-xl font-semibold mb-4">Location Section</h1>
+      <h1 class="dark:text-white text-dark text-xl font-semibold mb-4">Location Section</h1>
       <div ref="mapContainer" style="width: 100%; height: 400px;"></div>
       <div class="mt-5">
-      <div class="dark:bg-gray-700 p-5 rounded-md space-y-3">
-        <p class="text-white text-xl">Coordinates: <span class="font-bold">{{ lat }}, {{ lng }}</span></p>
-        <p class="text-white text-lg mt-3">Address: <span class="italic">{{ address }}</span></p>
+      <div class="dark:bg-gray-700 bg-gray-100 p-5 rounded-md space-y-3">
+        <p class="dark:text-white text-dark text-xl">Coordinates: <span class="font-bold">{{ lat }}, {{ lng }}</span></p>
+        <p class="dark:text-white text-dark text-lg mt-3">Address: <span class="italic">{{ address }}</span></p>
       </div>
         <div class="flex mt-4 items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
           <v-icon name="fc-info" class="mr-2" />
