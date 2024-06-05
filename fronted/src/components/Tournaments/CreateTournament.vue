@@ -62,6 +62,8 @@
   import axios from 'axios';
   import { useLoading } from '@/composables/loading'
 
+  import { onMounted } from 'vue'
+  import { initFlowbite } from 'flowbite'
 
   const toast = useToast();
   const userStore = useUserStore();
@@ -91,6 +93,11 @@
       loading.value = false
     }
   }
+
+
+  onMounted(() => {
+      initFlowbite();
+  })
 
 </script>
 

@@ -11,19 +11,19 @@
             <div class="dark:bg-slate-800 bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
                 <div class="sm:flex items-center justify-between">
                     <div class="flex items-center dark:text-white">
-                        <a class="rounded-full focus:outline-none focus:ring-2  focus:bg-indigo-50 focus:ring-indigo-800" href=" javascript:void(0)">
+                        <a @click="selectFilter('all')"  :class="{ 'text-indigo-700 bg-indigo-100': selectedFilter === 'all' }" class="rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" href="javascript:void(0)">
                             <div class="py-2 px-8 bg-indigo-100 text-indigo-700 rounded-full">
                                 <p>All</p>
                             </div>
                         </a>
-                        <a class="rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" href="javascript:void(0)">
+                        <a @click="selectFilter('upcoming')" :class="{ 'text-indigo-700 bg-indigo-100': selectedFilter === 'upcoming' }" class="rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" href="javascript:void(0)">
                             <div class="py-2 px-8 text-gray-600 dark:text-white hover:text-indigo-700 hover:bg-indigo-100 rounded-full ">
-                                <p>Done</p>
+                                <p>Upcoming</p>
                             </div>
                         </a>
-                        <a class="rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" href="javascript:void(0)">
+                        <a @click="selectFilter('past')" :class="{ 'text-indigo-700 bg-indigo-100': selectedFilter === 'past' }" class="rounded-full focus:outline-none focus:ring-2 focus:bg-indigo-50 focus:ring-indigo-800 ml-4 sm:ml-8" href="javascript:void(0)">
                             <div class="py-2 px-8 text-gray-600 dark:text-white hover:text-indigo-700 hover:bg-indigo-100 rounded-full ">
-                                <p>Pending</p>
+                                <p>Past</p>
                             </div>
                         </a>
                     </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="mt-7 overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <tbody  v-for="event in events" :key="event.id" >
+                        <tbody  v-for="event in filteredEvents" :key="event.id" >
                             
                             <tr tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
                                 <td>
@@ -110,7 +110,7 @@
 import AddTournaments from '@/components/Tournaments/CreateTournament.vue';
 
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useLoading } from '@/composables/loading';
 import { useToast } from 'vue-toastify';
 import { useUserStore } from '@/stores/user';
@@ -119,6 +119,8 @@ const loading = useLoading()
 const toast = useToast()
 const events = ref([])
 const userStore = useUserStore();
+
+const selectedFilter = ref('all');
 
 async function get_owner_events(){
     try{
@@ -136,6 +138,18 @@ async function get_owner_events(){
 onMounted(() =>{
     get_owner_events()
 })
+
+const filteredEvents = computed(() => {
+    if (selectedFilter.value === 'all') {
+        return events.value;
+    } else {
+        return events.value.filter(event => event.status === selectedFilter.value);
+    }
+});
+
+function selectFilter(filter) {
+    selectedFilter.value = filter;
+}
 
 </script>
 

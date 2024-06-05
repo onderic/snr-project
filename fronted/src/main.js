@@ -38,7 +38,8 @@ import { CoHome,
     FcHome,
     CoEventbrite,
     HiStatusOffline,
-    BiImageFill
+    BiImageFill,
+    IoCreate
  } from "oh-vue-icons/icons";
 
 addIcons(CoHome,
@@ -67,7 +68,8 @@ addIcons(CoHome,
     FcHome,
     CoEventbrite,
     HiStatusOffline,
-    BiImageFill
+    BiImageFill,
+    IoCreate
 );
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'

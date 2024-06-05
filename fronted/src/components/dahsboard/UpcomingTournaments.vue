@@ -11,7 +11,7 @@
                       <li class="py-3 sm:py-4">
                           <div class="flex items-center">
                               <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Neil image">
+                                  <img class="w-8 h-8 rounded-full" src="@/assets/ball.jpeg" alt="Neil image">
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -29,7 +29,7 @@
                       <li class="py-3 sm:py-4">
                           <div class="flex items-center ">
                               <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Bonnie image">
+                                  <img class="w-8 h-8 rounded-full" src="@/assets/ball.jpeg" alt="Bonnie image">
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">

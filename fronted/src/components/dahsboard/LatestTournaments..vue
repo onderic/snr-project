@@ -12,8 +12,8 @@
                   <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
                       <li class="py-3 sm:py-4">
                           <div class="flex items-center">
-                              <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Neil image">
+                              <div class="flex-shrink-0 dark:bg-white bg-gray-200 rounded-full p-1">
+                                <v-icon name="co-user" scale="2" />
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -30,8 +30,8 @@
                       </li>
                       <li class="py-3 sm:py-4">
                           <div class="flex items-center ">
-                              <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Bonnie image">
+                              <div class="flex-shrink-0 dark:bg-white bg-gray-200 rounded-full p-1">
+                                     <v-icon name="co-user" scale="2" />
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -48,8 +48,8 @@
                       </li>
                        <li class="py-3 sm:py-4">
                           <div class="flex items-center ">
-                              <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Bonnie image">
+                              <div class="flex-shrink-0 dark:bg-white bg-gray-200 rounded-full p-1">
+                                     <v-icon name="co-user" scale="2" />
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -66,8 +66,8 @@
                       </li>
                        <li class="py-3 sm:py-4">
                           <div class="flex items-center ">
-                              <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Bonnie image">
+                              <div class="flex-shrink-0 dark:bg-white bg-gray-200 rounded-full p-1">
+                                     <v-icon name="co-user" scale="2" />
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
@@ -84,8 +84,8 @@
                       </li>
                        <li class="py-3 sm:py-4">
                           <div class="flex items-center ">
-                              <div class="flex-shrink-0">
-                                  <img class="w-8 h-8 rounded-full" src="" alt="Bonnie image">
+                              <div class="flex-shrink-0 dark:bg-white bg-gray-200 rounded-full p-1">
+                                     <v-icon name="co-user" scale="2" />
                               </div>
                               <div class="flex-1 min-w-0 ms-4">
                                   <p class="text-sm font-medium text-gray-900 truncate dark:text-white">

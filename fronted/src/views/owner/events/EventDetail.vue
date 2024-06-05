@@ -96,28 +96,28 @@
                     <div class=" text-sm font-normal space-y-4 relative mt-4"> 
                 
                         <div class="flex items-start gap-3 relative">
-                            <a href="timeline.html"> <img src="" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                            <a class="dark:bg-white bg-gray-200 rounded-full p-1">   <v-icon name="co-user" scale="2" /> </a>
                             <div class="flex-1">
                                 <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Monroe Parker </a>
-                                <p class="mt-0.5 dark:text-gray-300">What a beautiful photo! I love it. 😍 </p>
+                                <p class="mt-0.5 dark:text-gray-300">Cant wait to snooker them </p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3 relative">
-                            <a href="timeline.html"> <img src="" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                            <a class="dark:bg-white bg-gray-200 rounded-full p-1">   <v-icon name="co-user" scale="2" /> </a>
                             <div class="flex-1">
                                 <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> John Michael </a>
                                 <p class="mt-0.5 dark:text-gray-300">   You captured the moment.😎 </p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3 relative">
-                            <a href="timeline.html"> <img src="" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                            <a class="dark:bg-white bg-gray-200 rounded-full p-1">   <v-icon name="co-user" scale="2" /> </a>
                             <div class="flex-1">
                                 <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> James Lewis </a>
-                                <p class="mt-0.5 dark:text-gray-300">What a beautiful photo! I love it. 😍 </p>
+                                <p class="mt-0.5 dark:text-gray-300">Cant wait to snooker them </p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3 relative">
-                            <a href="timeline.html"> <img src="" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                            <a class="dark:bg-white bg-gray-200 rounded-full p-1">   <v-icon name="co-user" scale="2" /> </a>
                             <div class="flex-1">
                                 <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Martin Gray </a>
                                 <p class="mt-0.5 dark:text-gray-300">   You captured the moment.😎 </p>
@@ -134,7 +134,7 @@
                     <!-- add comment -->
                     <div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 -m-6 mt-0 bg-gray-100 dark:bg-slate-700 dark:border-slate-700/40">
                         
-                        <img src="" alt="" class="w-6 h-6 rounded-full">
+                        <v-icon name="co-user" scale="2" />
                         
                         <div class="flex-1 relative overflow-hidden h-10">
                             <textarea placeholder="Add Comment...." class="w-full rounded-md py-3"></textarea>
