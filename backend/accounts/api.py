@@ -12,10 +12,9 @@ from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
 def user(request):
-    time.sleep(2)
     return JsonResponse({
         'id': request.user.id,
-        'username': request.user.username,
+        'name': request.user.name,
         'role': request.user.role,
     })
 
@@ -29,13 +28,13 @@ def register_user(request):
 
     if form.is_valid():
         email = form.cleaned_data.get('email')
-        username = form.cleaned_data.get('username')
+        name = form.cleaned_data.get('name')
 
         if User.objects.filter(email=email).exists():
             return Response({'message': 'error', 'error': 'Email is already taken'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if User.objects.filter(username=username).exists():
-            return Response({'message': 'error', 'error': 'Username is already taken'}, status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(name=name).exists():
+            return Response({'message': 'error', 'error': 'name is already taken'}, status=status.HTTP_400_BAD_REQUEST)
 
         form.save()
         return Response({'message': 'success'}, status=status.HTTP_201_CREATED)

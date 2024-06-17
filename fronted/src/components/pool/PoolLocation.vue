@@ -18,7 +18,7 @@
           </div>
       </li>
   </ol>
-      <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white capitalize">Pool registration here</h3>
+      <h3 class="mb-4 text-lg font-medium leading-none text-gray-900 dark:text-white capitalize">Pool registration here..</h3>
       <div class="grid gap-4 mb-4 sm:grid-cols-2">
           <div>
               <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
@@ -72,6 +72,7 @@
   import { useUserStore } from '@/stores/user';
   import axios from 'axios';
   import { useLoading } from '@/composables/loading'
+  import router from '@/router'; 
   
   const lat = ref(0);
   const lng = ref(0);
@@ -154,6 +155,8 @@
       const response = await axios.post('create-pool/', data);
       console.log('Response:', response.data);
       toast.success('Pool space  created successfully pending approval');
+
+      router.push('/manage-pool');
    
     } catch (error) {
       console.error('Error creating event:', error);

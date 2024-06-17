@@ -21,8 +21,8 @@
                   </h2>
                   <form class="mt-8 space-y-6"  @submit.prevent="register">
                       <div>
-                          <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
-                          <input  v-model="formData.username" type="text" name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="username" required />
+                          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
+                          <input  v-model="formData.name" type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name" required />
                       </div>
                       <div>
                           <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
@@ -70,7 +70,7 @@
       type: Object,
       required: true,
       default: () => ({
-        username: '',
+        name: '',
         email: '',
         password: ''
       })
@@ -87,7 +87,7 @@
     try {
       loading.value = true
       const response = await axios.post('register/', {
-        username: formData.username,
+        name: formData.name,
         email: formData.email,
         password1: formData.password,
         password2: formData.password

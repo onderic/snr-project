@@ -27,7 +27,7 @@
                             </div>
                         </a>
                     </div>
-                   <AddTournaments/>
+                   <AddTournaments @event-added="get_owner_events"/>
                    
                 </div>
                 <div class="mt-7 overflow-x-auto">

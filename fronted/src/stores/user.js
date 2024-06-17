@@ -9,7 +9,7 @@ export const useUserStore = defineStore({
       isAuthenticated: false,
       id: null,
       role: null,
-      username: null,
+      name: null,
       access: null,
       refresh: null,
     },
@@ -22,7 +22,7 @@ export const useUserStore = defineStore({
         this.user.refresh = localStorage.getItem('user.refresh');
         this.user.id = localStorage.getItem('user.id');
         this.user.role = localStorage.getItem('user.role');
-        this.user.username = localStorage.getItem('user.username');
+        this.user.name = localStorage.getItem('user.name');
         this.user.isAuthenticated = true;
 
         // this.refreshToken();
@@ -44,23 +44,23 @@ export const useUserStore = defineStore({
       this.user.isAuthenticated = false;
       this.user.id = null;
       this.user.role = null;
-      this.user.username = null;
+      this.user.name = null;
 
       localStorage.removeItem('user.access');
       localStorage.removeItem('user.refresh');
       localStorage.removeItem('user.id');
       localStorage.removeItem('user.role');
-      localStorage.removeItem('user.username');
+      localStorage.removeItem('user.name');
     },
 
     setUserInfo(user) {
       this.user.id = user.id;
       this.user.role = user.role;
-      this.user.username = user.username;
+      this.user.name = user.name;
 
       localStorage.setItem('user.id', this.user.id);
       localStorage.setItem('user.role', this.user.role);
-      localStorage.setItem('user.username', this.user.username);
+      localStorage.setItem('user.name', this.user.name);
     },
 
      // refreshToken() {

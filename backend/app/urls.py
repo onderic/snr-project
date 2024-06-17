@@ -10,5 +10,6 @@ urlpatterns = [
     path('tournaments_create/', api.create_tournament, name='tournaments_create'),
     path('owner_events/<uuid:user_id>/', api.owner_event),
     path('events/', api.events),
-      path('events/<int:event_id>/', api.get_one_event),
+    path('events/<int:event_id>/', api.get_one_event),
+    path('enroll_event/', api.enroll_event, name='enroll_event'),
 ]

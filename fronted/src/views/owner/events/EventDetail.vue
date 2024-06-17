@@ -39,7 +39,7 @@
                         </div>
 
                         <div>
-                            <Counter/>
+                            <Counter v-if="event" :startTime="event.start_time"/>
                         </div>
 
                     </div>
@@ -51,10 +51,7 @@
             <div class="flex items-center justify-between px-2 max-md:flex-col">
 
                 <div class="flex items-center gap-2 text-sm py-2 pr-1 lg:order-1">
-                    <button type="button" class="btn">  
-                        <ion-icon name="star-outline" class="text-xl md hydrated" role="img" aria-label="star outline"></ion-icon> 
-                        <span class="text-sm"> Join Now </span>
-                    </button>
+                    <Enroll  v-if="event" :eventId="event.id"/>
                     <button type="button" class="btn"> 
                         <ion-icon name="checkmark-circle-outline" class="text-xl md hydrated" role="img" aria-label="checkmark circle outline"></ion-icon> 
                         <span class="text-sm"> Going </span>
@@ -275,7 +272,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
-import Counter from '@/components/pool/CountDown.vue'
+import Counter from '@/components/Tournaments/CountDown.vue'
+import Enroll from '@/components/Tournaments/EnrollTournament.vue'
 
 const event = ref(null);
 const route = useRoute();

@@ -1,18 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+import User from '@/layouts/User.vue';
+import Dashboard from '@/views/Dashboard.vue';
+import AddPool from "@/views/owner/pool/AddPoool.vue";
+import Manage from "@/views/owner/events/ManageEvents.vue";
+import ManagePool from "@/views/owner/pool/ManagePool.vue";
+import EventDetail from "@/views/owner/events/EventDetail.vue";
+import Login from '@/views/auth/login.vue';
+import Register from '@/views/auth/register.vue';
 
-import User from '@/layouts/User.vue'
-import Dashboard from '@/views/Dashboard.vue'
-import AddPool from "@/views/owner/pool/AddPoool.vue"
-
-
-// events
-import Manage from "@/views/owner/events/ManageEvents.vue"
-import ManagePool from "@/views/owner/pool/ManagePool.vue"
-import EventDetail from "@/views/owner/events/EventDetail.vue"
-
-
-import Login from '@/views/auth/login.vue'
-import Register from '@/views/auth/register.vue'
+import { useUserStore } from '@/stores/user'; 
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,35 +29,23 @@ const router = createRouter({
           name: 'addpool',
           component: AddPool
         },
-
-        // events
         {
-          path:"/manage-events",
+          path: "/manage-events",
           name: "manage-events",
           component: Manage
-
         },
         {
           path: '/event-detail/:id',
           name: "event-detail",
           component: EventDetail
-
         },
-
-        // pools
         {
-          path:"/manage-pool",
+          path: "/manage-pool",
           name: "manage-pool",
           component: ManagePool
-
-        },
-
-
-
-      
+        }
       ]
     },
-
     {
       path: "/auth/login",
       name: "login",
@@ -72,45 +56,24 @@ const router = createRouter({
       name: "register",
       component: Register,
     },
-    
-
-    // {
-    //   path: "/auth/register",
-    //   name: "register",
-    //   component: Register,
-    // },
-
-    // {
-    //   path: "/terms-conditions",
-    //   name: "terms",
-    //   component: Terms,
-    // },
-    // {
-    //   path: "/auth/login",
-    //   name: "login",
-    //   component: Login,
-    // },
-    // {
-    //   path: '/auth/invite',
-    //   name: 'invite',
-    //   component: Referral,
-    //   props: route => ({ referralCode: route.query.ref, invest: route.query.invest })
-    // },
   ]
-})
+});
 
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requiresAuth) {
-//     const token = localStorage.getItem('accessToken');
-//     if (!token) {
-//       next({ name: 'login', query: { to: to.path } });
-//     } else {
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+  if (to.meta.requiresAuth) {
+    const token = localStorage.getItem('user.access');
+    if (!token) {
+      next({ name: 'login', query: { to: to.path } });
+    } else {
+      if (!userStore.user.isAuthenticated) {
+        userStore.initStore();
+      }
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
-//       next();
-//     }
-//   } else {
-//     next();
-//   }
-// });
-
-export default router
+export default router;

@@ -94,8 +94,11 @@ const login = async () => {
     const userinfo = await axios.get('user');
     userStore.setUserInfo(userinfo.data);
 
+    // Determine intended page after login
     const intendedPage = route.query.to || '/';
+
     router.push(intendedPage);
+
     toast.success('Login successful!');
  
   } catch (error) {
