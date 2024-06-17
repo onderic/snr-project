@@ -28,14 +28,14 @@
             </div>
             <!-- Modal body -->
             <div class="p-4 md:p-5 space-y-4">
-                <p class="text-lg text-gray-600">Are you sure you want to join this tournament?</p>
+                <p class="text-lg text-gray-600 dark:text-white">Are you sure you want to join this tournament?</p>
             </div>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button @click="enroll" type="submit" class="btn">
-                    <v-icon v-if="loading.value" name="gi-spinning-blades" animation="spin" scale="1"/> 
-                    Join 
-                    </button>
+                <button @click="enroll" type="submit" class="btn" :disabled="loading">
+                <v-icon v-if="loading" name="gi-spinning-blades" animation="spin" scale="1" />
+                <span>Join</span>
+                </button>
                 <button data-modal-hide="small-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
             </div>
         </div>
@@ -53,6 +53,7 @@ import axios from 'axios';
 import { defineProps } from 'vue';
 import { initFlowbite } from 'flowbite';
 import { onMounted } from 'vue';
+import router from '@/router'; 
 
 const toast = useToast();
 const userStore = useUserStore();
@@ -69,28 +70,36 @@ async function enroll() {
     const data = {
       user: userStore.user.id,
       tournament: props.eventId
-      
     };
 
-    console.log("data", data)
+    const response = await axios.post('enroll_event/', data, {
+      headers: {
+        Authorization: `Bearer ${userStore.user.access}`
+      },
+    });
 
-    const response = await axios.post('enroll_event/', data);
     toast.success('Enrollment successful');
+    
+    // Verify if the router push is happening
+    router.push('/enrollment-list').then(() => {
+        window.location.reload();
+    }).catch(err => {
+      console.error('Navigation Error:', err);
+    });
 
   } catch (error) {
     console.error('Error enrolling user:', error);
-    toast.error('Failed to enroll user');
+    toast.error(error.response?.data?.error || 'Something went wrong, try later');
   } finally {
     loading.value = false;
   }
 }
 
-
 onMounted(() => {
-    initFlowbite();
+  initFlowbite();
 });
-
 </script>
+
 
 <style>
 

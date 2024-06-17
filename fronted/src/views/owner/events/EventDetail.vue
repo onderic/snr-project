@@ -52,10 +52,10 @@
 
                 <div class="flex items-center gap-2 text-sm py-2 pr-1 lg:order-1">
                     <Enroll  v-if="event" :eventId="event.id"/>
-                    <button type="button" class="btn"> 
+                    <div class="btn"> 
                         <ion-icon name="checkmark-circle-outline" class="text-xl md hydrated" role="img" aria-label="checkmark circle outline"></ion-icon> 
-                        <span class="text-sm"> Going </span>
-                    </button>
+                        <span class="text-sm">Fee: {{ event.enrollment_fee }} </span>
+                    </div>
                 
 
             
@@ -164,7 +164,7 @@
                             <div class="flex gap-3">
                                 <div class="p-2 inline-flex rounded-full bg-rose-50 self-center"> <ion-icon name="leaf-outline" class="text-2xl text-rose-600 md hydrated" role="img" aria-label="leaf outline"></ion-icon></div>
                                 <div>
-                                    <h3 class="sm:text-xl sm:font-semibold mt-1 text-black dark:text-white text-base font-normal">162</h3>
+                                    <h3 class="sm:text-xl sm:font-semibold mt-1 text-black dark:text-white text-base font-normal">{{event.attendees_count}}</h3>
                                     <p class="dark:text-white">Going</p>
                                 </div>
                             </div> 

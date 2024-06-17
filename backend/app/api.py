@@ -4,9 +4,9 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.response import Response
 from rest_framework import status
 from .forms import PoolForm
-from .serializers import EnrollmentSerializer, PoolSpaceSerializer,TournamentSerializer
+from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer
 from .models import Enrollment, PoolSpace,Tournament
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from math import radians, cos, sin, sqrt, atan2
 from geopy.distance import geodesic
 from accounts.models import User
@@ -15,7 +15,7 @@ from accounts.models import User
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
-    # time.sleep(1)
+    time.sleep(1)
     user_lat = request.query_params.get('latitude')
     user_lng = request.query_params.get('longitude')
 
@@ -101,22 +101,29 @@ def get_one_event(request, event_id):
     serializer = TournamentSerializer(event)
     return Response(serializer.data)
 
-
 @api_view(['POST'])
-@authentication_classes([])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def enroll_event(request):
-    print("User details:", request.data)
-    serializer = EnrollmentSerializer(data=request.data)
+    time.sleep(1)
+    serializer = EnrollmentWriteSerializer(data=request.data)
     
     if serializer.is_valid():
-        user = request.data.user
+        user = request.user
         tournament = serializer.validated_data['tournament']
 
         if Enrollment.objects.filter(user=user, tournament=tournament).exists():
-            return Response({'error': 'User is already enrolled in this tournament'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'You already enrolled in this tournament'}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer.save(user=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_enrollments(request):
+    user = request.user
+    enrollments = Enrollment.objects.filter(user=user)
+    serializer = EnrollmentReadSerializer(enrollments, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

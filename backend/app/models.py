@@ -23,23 +23,19 @@ class Tournament(models.Model):
     end_time = models.CharField(max_length=255)
     organizer = models.ForeignKey(User, related_name='organized_tournaments', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, related_name='tournaments_attending', blank=True)
-    enrollment_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    enrollment_fee = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=50, choices=[('upcoming', 'Upcoming'), ('ongoing', 'Ongoing'), ('past', 'Past')], default='upcoming')
 
+    @property
+    def attendees_count(self):
+        return self.attendees.count()
+
     def __str__(self):
         return self.title
 
-    # def save(self, *args, **kwargs):
-    #     if self.end_time < timezone.now():
-    #         self.status = 'past'
-    #     elif self.start_time <= timezone.now() <= self.end_time:
-    #         self.status = 'ongoing'
-    #     else:
-    #         self.status = 'upcoming'
-    #     super().save(*args, **kwargs)
-
+  
 
 class Enrollment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import User from '@/layouts/User.vue';
 import Dashboard from '@/views/Dashboard.vue';
+import Enroll from '@/views/Enrollment.vue';
 import AddPool from "@/views/owner/pool/AddPoool.vue";
 import Manage from "@/views/owner/events/ManageEvents.vue";
 import ManagePool from "@/views/owner/pool/ManagePool.vue";
@@ -43,6 +44,11 @@ const router = createRouter({
           path: "/manage-pool",
           name: "manage-pool",
           component: ManagePool
+        },
+        {
+          path: "/enrollment-list",
+          name: "enrollment",
+          component: Enroll
         }
       ]
     },

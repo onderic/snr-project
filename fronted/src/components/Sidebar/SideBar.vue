@@ -24,11 +24,18 @@
             <span>Create</span>
           </router-link>
         </li>
+        <li>
+          <router-link to="/enrollment-list" exact-active-class="bg-blue-500 text-white dark:bg-blue-600 dark:text-white" class="flex items-center space-x-2 py-2 mt-2 px-4 rounded-lg hover:bg-gray-400 dark:hover:bg-slate-600 text-sm dark:text-white">
+            <v-icon name="fc-calendar" class="darkt:text-white" />
+            <span>Events</span>
+          </router-link>
+        </li>
       </ul>
 
           
         </div>
-        <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
+        
+        <div v-if="userStore.user.role =='superuser'"  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
             <h1 class="mb-3 font-semibold ">Administrator</h1>
               <ul>
                 <li>
@@ -79,7 +86,7 @@
               </ul>
           </div>
         <div  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
-          <h1 class="mb-3 font-semibold ">User, {{ userStore.user.username }}</h1>
+          <h1 class="mb-3 font-semibold ">User, {{ userStore.user.name }}</h1>
               <ul>
                 <li>
                   <a v-if="isAuthenticated" @click.prevent="handleLogout" class="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-gray-400 dark:hover:bg-slate-600 font-bold text-sm dark:text-white">
