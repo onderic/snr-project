@@ -13,4 +13,7 @@ urlpatterns = [
     path('events/<int:event_id>/', api.get_one_event),
     path('enroll_event/', api.enroll_event, name='enroll_event'),
     path('user-enrollments/', api.user_enrollments, name='user-enrollments'),
+
+    # mpesa
+    path('pay-enrollment-fee/', api.pay_enrollment_fee, name='pay_enrollment_fee'),
 ]

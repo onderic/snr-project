@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from math import radians, cos, sin, sqrt, atan2
 from geopy.distance import geodesic
 from accounts.models import User
+from .mpesa import LipaNaMpesa
 
 
 @api_view(['GET'])
@@ -127,3 +128,40 @@ def user_enrollments(request):
     enrollments = Enrollment.objects.filter(user=user)
     serializer = EnrollmentReadSerializer(enrollments, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def pay_enrollment_fee(request, id):
+    try:
+        enrollment = Enrollment.objects.get(id=id, user=request.user, paid=False)
+    except Enrollment.DoesNotExist:
+        return Response({'error': 'Enrollment not found or already paid'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    phone_number = request.data.get('phone_number')
+    amount = request.data.get('amount')
+
+    if not phone_number or not amount:
+        return Response({'error': 'Phone number and amount are required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if phone_number.startswith('0'):
+        phone_number = '254' + phone_number[1:]
+    
+    payload = {
+        'enrollment_id': id,
+        'phone_number': phone_number,
+        'amount': amount
+    }
+
+    mpesa = LipaNaMpesa()
+
+    try:
+        response = mpesa.make_stk_push(payload)
+        # enrollment.paid = True
+        # enrollment.save()
+        
+        return Response(response, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
