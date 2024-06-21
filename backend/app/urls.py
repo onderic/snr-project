@@ -15,5 +15,6 @@ urlpatterns = [
     path('user-enrollments/', api.user_enrollments, name='user-enrollments'),
 
     # mpesa
-    path('pay-enrollment-fee/', api.pay_enrollment_fee, name='pay_enrollment_fee'),
+    path('pay-enrollment-fee/<uuid:id>/', api.pay_enrollment_fee, name='pay_enrollment_fee'),
+    path('mpesa-callback/', api.mpesa_callback, name='mpesa-callback'),
 ]

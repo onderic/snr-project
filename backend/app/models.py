@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from datetime import timezone
+import uuid
 
 class PoolSpace(models.Model):
     title = models.CharField(max_length=255)
@@ -38,6 +39,7 @@ class Tournament(models.Model):
   
 
 class Enrollment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
     enrolled_at = models.DateTimeField(auto_now_add=True)
@@ -73,3 +75,18 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.user.name} about {self.tournament.title}"
+
+
+class MpesaTransaction(models.Model):
+    merchant_request_id = models.CharField(max_length=100, unique=True)
+    checkout_request_id = models.CharField(max_length=100, null=True, blank=True)
+    result_code = models.IntegerField(null=True, blank=True)
+    result_description = models.TextField(null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    mpesa_receipt_number = models.CharField(max_length=50, null=True, blank=True)
+    transaction_date = models.DateTimeField(null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"M-Pesa Transaction - {self.checkout_request_id}"

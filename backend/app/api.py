@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 import time
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -5,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .forms import PoolForm
 from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer
-from .models import Enrollment, PoolSpace,Tournament
+from .models import Enrollment, MpesaTransaction, PoolSpace,Tournament
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from math import radians, cos, sin, sqrt, atan2
 from geopy.distance import geodesic
@@ -158,10 +160,59 @@ def pay_enrollment_fee(request, id):
     mpesa = LipaNaMpesa()
 
     try:
-        response = mpesa.make_stk_push(payload)
+        response = mpesa.stk_push(payload)
         # enrollment.paid = True
         # enrollment.save()
         
         return Response(response, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mpesa_callback(request):
+    try:
+        data = json.loads(request.body)
+        stk_callback = data.get('Body', {}).get('stkCallback', {})
+
+        merchant_request_id = stk_callback.get('MerchantRequestID')
+        checkout_request_id = stk_callback.get('CheckoutRequestID')
+        result_code = stk_callback.get('ResultCode')
+        result_description = stk_callback.get('ResultDesc')
+
+        callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+        amount = next((item['Value'] for item in callback_metadata if item['Name'] == 'Amount'), None)
+        mpesa_receipt_number = next((item['Value'] for item in callback_metadata if item['Name'] == 'MpesaReceiptNumber'), None)
+        transaction_date = next((item['Value'] for item in callback_metadata if item['Name'] == 'TransactionDate'), None)
+        phone_number = next((item['Value'] for item in callback_metadata if item['Name'] == 'PhoneNumber'), None)
+
+        # Check if all required fields are present
+        if not all([merchant_request_id, checkout_request_id, result_code, result_description, amount, mpesa_receipt_number, transaction_date, phone_number]):
+            return Response({'error': 'Missing required fields in callback data'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Convert transaction_date to datetime if it's in string format
+        if isinstance(transaction_date, str):
+            transaction_date = datetime.strptime(transaction_date, "%Y%m%d%H%M%S")
+
+        transaction = MpesaTransaction.objects.filter(merchant_request_id=merchant_request_id).first()
+
+        if transaction:
+            transaction.checkout_request_id = checkout_request_id
+            transaction.result_code = result_code
+            transaction.result_description = result_description
+            transaction.amount = amount
+            transaction.mpesa_receipt_number = mpesa_receipt_number
+            transaction.transaction_date = transaction_date
+            transaction.phone_number = phone_number
+            transaction.save()
+
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        # Handle exceptions gracefully
+        print(f"Error processing M-Pesa callback: {str(e)}")
+        return Response({'error': 'Error processing callback'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

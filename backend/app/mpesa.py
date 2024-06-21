@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
+from .models import MpesaTransaction
 
 load_dotenv()
 
@@ -37,6 +38,7 @@ class LipaNaMpesa:
                 self.access_token_url,
                 auth=HTTPBasicAuth(self.consumer_key, self.consumer_secret)
             )
+            res.raise_for_status()
             token = res.json()['access_token']
             self.headers = {
                 "Authorization": f"Bearer {token}",
@@ -46,6 +48,7 @@ class LipaNaMpesa:
             print(str(e), "error getting access token")
             raise e
         return token
+
     
     def generate_password(self):
         timestamp = self.now.strftime("%Y%m%d%H%M%S")
@@ -56,11 +59,9 @@ class LipaNaMpesa:
     def stk_push(self, payload):
         amount = payload['amount']
         phone_number = payload['phone_number']
-        enrollment_id = payload['enrollment_id']
         password = self.generate_password()
         timestamp = self.now.strftime("%Y%m%d%H%M%S")
-
-        callback_url = f"{self.call_back}/{enrollment_id}"  
+        callback_url = self.call_back
 
         data = {
             "BusinessShortCode": self.shortcode,
@@ -81,4 +82,11 @@ class LipaNaMpesa:
             json=data,
             headers=self.headers
         )
+        response.raise_for_status()
+        merchant_request_id = response.json().get('MerchantRequestID')
+        transaction = MpesaTransaction.objects.create(
+            merchant_request_id= merchant_request_id
+        )
+        print("Transaction made", transaction)
         return response.json()
+    
