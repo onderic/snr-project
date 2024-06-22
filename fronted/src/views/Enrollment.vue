@@ -15,7 +15,7 @@
                 </div>
                 <div class="mt-7 overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <tbody  v-for="event in filteredEvents" :key="event.id" >
+                        <tbody  v-for="event in events" :key="event.id" >
                             
                             <tr tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
                                 <td>
@@ -58,13 +58,22 @@
                                         <p class="text-sm leading-none text-gray-600 dark:text-white ml-2">Ksh {{event.tournament.enrollment_fee}}</p>
                                     </div>
                                 </td>
+                                <td class="pl-5">
+                                    <div class="flex items-center dark:text-white">
+                                        <!-- Conditionally render the button based on the `paid` status -->
+                                        <!-- v-if="!event.paid" -->
+                                        <button  @click="openModal(event.tournament.enrollment_fee, event.id)" class="btn">Pay</button>
+                                        <Mpesa :isOpen="isModalOpen" :amount="selectedAmount" :eventId="selectedEventId" @close="closeModal" />
+                                    </div>
+                                </td>
+
                                
                                 <td class="pl-4">
                                     <button :class="{ 
-                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-green-500 text-white': event.complete, 
-                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-gray-300 text-gray-700': !event.complete 
+                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-green-500 text-white': event.paid, 
+                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-gray-300 text-gray-700': !event.paid 
                                     }">
-                                        {{ event.complete ? 'Complete' : 'Incomplete' }}
+                                        {{ event.paid ? 'Complete' : 'Incomplete' }}
                                     </button>
                                 </td>
 
@@ -102,15 +111,27 @@
 import axios from 'axios';
 import { ref, onMounted, computed } from 'vue';
 import { useLoading } from '@/composables/loading';
-import { useToast } from 'vue-toastify';
 import { useUserStore } from '@/stores/user';
+import Mpesa from '@/components/Tournaments/Mpesa.vue';
 
 const loading = useLoading()
-const toast = useToast()
 const events = ref([])
 const userStore = useUserStore();
 
-const selectedFilter = ref('all');
+const isModalOpen = ref(false);
+const selectedAmount = ref(0);
+const selectedEventId = ref(null);
+
+const openModal = (amount, eventId) => {
+  isModalOpen.value = true;
+  selectedAmount.value = amount;
+  selectedEventId.value = eventId
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+
 
 async function get_user_events(){
     try{
@@ -129,21 +150,12 @@ async function get_user_events(){
     }
 }
 
+
 onMounted(() =>{
     get_user_events()
 })
 
-const filteredEvents = computed(() => {
-    if (selectedFilter.value === 'all') {
-        return events.value;
-    } else {
-        return events.value.filter(event => event.status === selectedFilter.value);
-    }
-});
 
-function selectFilter(filter) {
-    selectedFilter.value = filter;
-}
 
 </script>
 

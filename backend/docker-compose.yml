@@ -1,0 +1,25 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/staticfiles/
+      - media_volume:/mediafiles/
+    expose:
+      - 80
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - static_volume:/staticfiles/
+      - media_volume:/mediafiles/
+
+volumes:
+  static_volume:
+  media_volume:

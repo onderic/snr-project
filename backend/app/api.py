@@ -136,7 +136,8 @@ def user_enrollments(request):
 @permission_classes([IsAuthenticated])
 def pay_enrollment_fee(request, id):
     try:
-        enrollment = Enrollment.objects.get(id=id, user=request.user, paid=False)
+        enrollment = Enrollment.objects.get(id=id, user=request.user)
+        # enrollment = Enrollment.objects.get(id=id, user=request.user, paid=False)
     except Enrollment.DoesNotExist:
         return Response({'error': 'Enrollment not found or already paid'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
@@ -161,17 +162,13 @@ def pay_enrollment_fee(request, id):
 
     try:
         response = mpesa.stk_push(payload)
-        # enrollment.paid = True
-        # enrollment.save()
-        
         return Response(response, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
-
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def mpesa_callback(request):
     try:
         data = json.loads(request.body)
@@ -188,17 +185,11 @@ def mpesa_callback(request):
         transaction_date = next((item['Value'] for item in callback_metadata if item['Name'] == 'TransactionDate'), None)
         phone_number = next((item['Value'] for item in callback_metadata if item['Name'] == 'PhoneNumber'), None)
 
-        # Check if all required fields are present
-        if not all([merchant_request_id, checkout_request_id, result_code, result_description, amount, mpesa_receipt_number, transaction_date, phone_number]):
-            return Response({'error': 'Missing required fields in callback data'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Convert transaction_date to datetime if it's in string format
-        if isinstance(transaction_date, str):
-            transaction_date = datetime.strptime(transaction_date, "%Y%m%d%H%M%S")
-
         transaction = MpesaTransaction.objects.filter(merchant_request_id=merchant_request_id).first()
 
         if transaction:
+            if transaction.is_processed:
+                return Response({'error': 'Transaction has already been processed'}, status=status.HTTP_400_BAD_REQUEST)
             transaction.checkout_request_id = checkout_request_id
             transaction.result_code = result_code
             transaction.result_description = result_description
@@ -206,7 +197,14 @@ def mpesa_callback(request):
             transaction.mpesa_receipt_number = mpesa_receipt_number
             transaction.transaction_date = transaction_date
             transaction.phone_number = phone_number
+            transaction.is_processed = True
             transaction.save()
+
+            # Update the enrollment status to paid
+            if result_code == 0:
+                enrollment = transaction.enrollment
+                enrollment.paid = True
+                enrollment.save()
 
             return Response(status=status.HTTP_200_OK)
         else:

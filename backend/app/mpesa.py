@@ -6,7 +6,7 @@ import requests
 from datetime import datetime
 from requests.auth import HTTPBasicAuth
 from dotenv import load_dotenv
-from .models import MpesaTransaction
+from .models import Enrollment, MpesaTransaction
 
 load_dotenv()
 
@@ -28,7 +28,7 @@ class LipaNaMpesa:
             if self.access_token is None:
                 raise Exception("Request for access token failed")
             else:
-                self.access_token_expiration = time.time() + 3599
+                self.access_token_expiration = time.time()
         except Exception as e:
             print(str(e))
     
@@ -58,6 +58,7 @@ class LipaNaMpesa:
     
     def stk_push(self, payload):
         amount = payload['amount']
+        enrollment_id = payload['enrollment_id']
         phone_number = payload['phone_number']
         password = self.generate_password()
         timestamp = self.now.strftime("%Y%m%d%H%M%S")
@@ -84,8 +85,12 @@ class LipaNaMpesa:
         )
         response.raise_for_status()
         merchant_request_id = response.json().get('MerchantRequestID')
+
+        enrollment = Enrollment.objects.get(id=enrollment_id)
+        
         transaction = MpesaTransaction.objects.create(
-            merchant_request_id= merchant_request_id
+            merchant_request_id= merchant_request_id,
+            enrollment=enrollment
         )
         print("Transaction made", transaction)
         return response.json()

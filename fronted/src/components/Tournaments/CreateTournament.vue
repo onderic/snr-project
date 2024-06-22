@@ -39,7 +39,12 @@
                 <label for="end_time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End Date</label>
                 <input type="datetime-local" name="end_time" id="end_time" v-model="end_time" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Event end time" required>
               </div>
-              <div class="sm:col-span-2">
+             
+              <div>
+                <label for="number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Registration fee</label>
+                <input type="number" name="number" id="number" v-model="enrollment_fee" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Event title" required="">
+              </div>
+            <div class="sm:col-span-2">
                 <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                 <textarea id="description" v-model="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Write product description here"></textarea>                    
               </div>
@@ -74,6 +79,7 @@ const title = ref('');
 const description = ref('');
 const start_time = ref('');
 const end_time = ref('');
+const enrollment_fee = ref('');
 
 async function addEvent() {
     try {
@@ -82,6 +88,7 @@ async function addEvent() {
             title: title.value,
             start_time: start_time.value,
             end_time: end_time.value,
+            enrollment_fee: enrollment_fee.value,
             description: description.value,
         };
         const data = {
