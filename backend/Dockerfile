@@ -1,24 +1,35 @@
-# Dockerfile
+# Use a Python 3.12 base image
+FROM python:3.12-alpine
 
-# Use python base image
-FROM python:3.9-alpine
+# Install system dependencies
+RUN apk update && apk add --no-cache \
+    gcc \
+    musl-dev \
+    mariadb-dev \
+    pkgconfig
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set working directory in the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Install dependencies
+# Copy the requirements file
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the entire project into the container
-COPY . /app/
+# Install the Python dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Expose the port the app runs on
-EXPOSE 8000
+
+# Copy the rest of the application code
+COPY . /app
+
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Copy the .env file to the container
+COPY .env /app/.env
+
+# Make startup.sh executable
+RUN chmod +x /app/startup.sh
 
 # Command to run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["/bin/sh", "-c", "/app/startup.sh"]

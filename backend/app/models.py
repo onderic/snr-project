@@ -11,7 +11,7 @@ class PoolSpace(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     address = models.TextField()
-    user = models.ForeignKey(User, related_name='owned_pool_spaces', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='pool_space', on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=[('active', 'Active'), ('inactive', 'Inactive')], default='inactive')
 
     def __str__(self):
@@ -23,6 +23,7 @@ class Tournament(models.Model):
     start_time = models.CharField(max_length=255)
     end_time = models.CharField(max_length=255)
     organizer = models.ForeignKey(User, related_name='organized_tournaments', on_delete=models.CASCADE)
+    pool_space = models.ForeignKey(PoolSpace, related_name='tournaments', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, related_name='tournaments_attending', blank=True)
     enrollment_fee = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -35,7 +36,6 @@ class Tournament(models.Model):
 
     def __str__(self):
         return self.title
-
   
 
 class Enrollment(models.Model):

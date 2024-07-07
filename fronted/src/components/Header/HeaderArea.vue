@@ -27,7 +27,9 @@
         <div class="flex-1 relative">
           <div class="max-w-[1220px] mx-auto flex items-center">
             <!-- search -->
-            <div
+            <SearchBar />
+
+            <!-- <div
               id="search--box"
               class="xl:w-[680px] sm:w-96 sm:relative rounded-xl overflow-hidden z-20 bg-gray-100 dark:bg-slate-900 max-md:hidden w-screen left-0 max-sm:fixed max-sm:top-2 dark:!bg-white/5"
             >
@@ -37,7 +39,7 @@
                 placeholder="Search Friends, videos .."
                 class="w-full !pl-10 !font-normal !bg-transparent h-12 !text-sm"
               />
-            </div>
+            </div> -->
 
             <!-- header icons -->
             <div
@@ -73,6 +75,7 @@ import DarkModeSwitcher from '@/components/Header/DarkModeSwitcher.vue'
 // import DropdownMessage from '@/components/Header/DropdownMessage.vue'
 import DropdownNotification from '@/components/Header/DropdownNotification.vue'
 import DropdownUser from '@/components/Header/DropdownUser.vue'
+import SearchBar from '@/components/Header/SearchBar.vue'
 
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'

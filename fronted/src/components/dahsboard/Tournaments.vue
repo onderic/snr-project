@@ -1,14 +1,28 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <ProgressBar :loading="loading" />
     <div class="box p-5 dark:bg-slate-800 bg-white shadow-xl rounded-md">
       <h1 class="font-semibold text-2xl capitalize dark:text-white mb-4">Top curated Tournaments for you</h1>
+      
+      <input
+        type="text"
+        class="w-full mb-4 p-2 rounded-md dark:bg-gray-700 dark:text-white"
+        placeholder="Search..."
+        v-model="searchQuery"
+      />
+
       <div v-if="loading" class="space-y-4">
-        <Skeleton/>
+        <Skeleton />
       </div>
       <div v-else>
-        <div v-for="event in events" :key="event.id" class="shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
+        <div v-if="searchedProducts.length === 0" class="text-center text-2xl mb-5 text-red-500 dark:text-red-500">
+          No tournaments found. Try a different search term.!
+        </div>
+        <div
+          v-for="event in searchedProducts"
+          :key="event.id"
+          class="shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row"
+        >
           <div class="md:w-40 md:h-full w-full h-36 overflow-hidden">
             <router-link :to="{ name: 'event-detail', params: { id: event.id } }">
               <img src="https://cdn.pixabay.com/photo/2020/08/15/03/19/billiards-5489526_1280.jpg" alt="Event Image" class="w-full h-full object-cover">
@@ -30,7 +44,9 @@
           </div>
           <div class="flex flex-col sm:flex-row items-center gap-2 self-end pt-2 sm:justify-end mb-4">
             <button type="button" class="dark:bg-slate-700 dark:text-white px-2 py-1 rounded-lg w-full sm:w-auto">Interested</button>
-            <button type="button" class="px-2.5 py-2 w-full sm:w-auto"><ion-icon name="arrow-redo" class="text-base"></ion-icon></button>
+            <button type="button" class="px-2.5 py-2 w-full sm:w-auto">
+              <ion-icon name="arrow-redo" class="text-base"></ion-icon>
+            </button>
           </div>
         </div>
 
@@ -45,7 +61,7 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { provideLoading } from '@/composables/loading';
 import ProgressBar from '@/components/ProgressBar.vue';
 import Skeleton from '@/components/Skeleton/Tournament.vue';
@@ -53,6 +69,13 @@ import Skeleton from '@/components/Skeleton/Tournament.vue';
 const loading = provideLoading();
 const events = ref([]);
 
+const searchQuery = ref("");
+
+const searchedProducts = computed(() => {
+  return events.value.filter((event) => {
+    return event.title.toLowerCase().includes(searchQuery.value.toLowerCase());
+  });
+});
 
 async function get_events() {
   try {

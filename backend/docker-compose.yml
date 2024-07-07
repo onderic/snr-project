@@ -1,15 +1,24 @@
-version: '3'
+version: '3.8'
+
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    depends_on:
+      - db
     volumes:
       - static_volume:/staticfiles/
       - media_volume:/mediafiles/
     expose:
-      - 80
+      - 8000
+
   nginx:
     build:
       context: ./nginx
@@ -19,7 +28,23 @@ services:
     volumes:
       - static_volume:/staticfiles/
       - media_volume:/mediafiles/
+    depends_on:
+      - api
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'snrProject' 
+      MYSQL_USER: 'snrProject'     
+      MYSQL_PASSWORD: '0909'       
+      MYSQL_ROOT_PASSWORD: '0909'
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
 
 volumes:
   static_volume:
   media_volume:
+  mysql_data:

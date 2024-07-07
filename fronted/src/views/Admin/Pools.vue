@@ -123,15 +123,15 @@
   async function getPoolSpaces() {
     try {
       loading.value = true;
-      const response = await axios.get('/user-pool-spaces/', { 
+      const response = await axios.get('/pool-spaces/', {
         headers: {
           Authorization: `Bearer ${userStore.user.access}`,
         },
       });
       poolSpaces.value = response.data;
-      console.log('User PoolSpaces:', response.data);
+      console.log('PoolSpaces:', response.data);
     } catch (error) {
-      console.error('Error fetching user pool spaces:', error.message);
+      console.error('Error fetching pool spaces:', error.message);
     } finally {
       loading.value = false;
     }
@@ -169,21 +169,22 @@
   }
 
   async function updatePoolSpace() {
-    try {
-      const response = await axios.put(`pool-spaces/${editForm.value.id}/`, editForm.value, {
-        headers: {
-          Authorization: `Bearer ${userStore.user.access}`,
-        },
-      });
-      const updatedPoolSpaceIndex = poolSpaces.value.findIndex(poolSpace => poolSpace.id === editForm.value.id);
-      if (updatedPoolSpaceIndex !== -1) {
-        poolSpaces.value[updatedPoolSpaceIndex] = response.data;
-      }
-      closeEditModal();
-    } catch (error) {
-      console.error('Error updating pool space:', error.message);
+  try {
+    const response = await axios.put(`pool-spaces/${editForm.value.id}/`, editForm.value, {
+      headers: {
+        Authorization: `Bearer ${userStore.user.access}`,
+      },
+    });
+    const updatedPoolSpaceIndex = poolSpaces.value.findIndex(poolSpace => poolSpace.id === editForm.value.id);
+    if (updatedPoolSpaceIndex !== -1) {
+      poolSpaces.value[updatedPoolSpaceIndex] = response.data;
     }
+    closeEditModal();
+  } catch (error) {
+    console.error('Error updating pool space:', error.message);
   }
+}
+
 
   onMounted(() => {
     getPoolSpaces();

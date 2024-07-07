@@ -65,3 +65,11 @@ def get_user_data(request, pk):
                 return Response({'message': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
     except user.DoesNotExist:
         return Response({'message': 'User not found'},status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_owners(request):
+    owners = User.objects.filter(is_owner=True)
+    serializer = UserSerializer(owners, many=True)
+    return Response(serializer.data)

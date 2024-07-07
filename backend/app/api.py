@@ -1,7 +1,9 @@
 from datetime import datetime
 import json
 import time
+import uuid
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,7 +20,7 @@ from .mpesa import LipaNaMpesa
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
-    time.sleep(1)
+    time.sleep(2)
     user_lat = request.query_params.get('latitude')
     user_lng = request.query_params.get('longitude')
 
@@ -46,6 +48,55 @@ def pool_spaces(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_pool_spaces(request):
+    try:
+        pool_spaces = PoolSpace.objects.filter(user=request.user)
+        serializer = PoolSpaceSerializer(pool_spaces, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+    
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_pool_spaces(request):
+    pool_spaces = PoolSpace.objects.all()
+    serializer = PoolSpaceSerializer(pool_spaces, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def retrieve_pool_space(request, pk):
+    try:
+        pool_space = PoolSpace.objects.get(pk=pk)
+    except PoolSpace.DoesNotExist:
+        return Response({"error": "PoolSpace not found"}, status=404)
+    
+    serializer = PoolSpaceSerializer(pool_space)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_pool_space(request, pk):
+    try:
+        pool_space = PoolSpace.objects.get(pk=pk)
+    except PoolSpace.DoesNotExist:
+        return Response({"error": "PoolSpace not found"}, status=404)
+    
+    if request.method == 'PUT':
+        serializer = PoolSpaceSerializer(pool_space, data=request.data)
+    else:  # PATCH request
+        serializer = PoolSpaceSerializer(pool_space, data=request.data, partial=True)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -60,23 +111,80 @@ def create_pool_space(request):
 
 
 
-# tournaments
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
 def create_tournament(request):
-    serializer = TournamentSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        # Extract data from request payload
+        title = request.data.get('title')
+        description = request.data.get('description', '')
+        start_time = request.data.get('start_time')
+        end_time = request.data.get('end_time')
+        enrollment_fee = request.data.get('enrollment_fee')
+        organizer_id = request.data.get('organizer')
 
+        # Validate organizer exists
+        organizer = get_object_or_404(User, id=organizer_id)
+    
+        pool_space = get_object_or_404(PoolSpace, user=organizer)
+    
+        tournament_data = {
+            'title': title,
+            'description': description,
+            'start_time': start_time,
+            'end_time': end_time,
+            'enrollment_fee': enrollment_fee,
+            'organizer': str(organizer.id), 
+            'pool_space': str(pool_space.id)
+        }
+        serializer = TournamentSerializer(data=tournament_data)
 
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['PUT'])
+@authentication_classes([])
+@permission_classes([])
+def update_tournament(request, pk):
+    try:
+        tournament = get_object_or_404(Tournament, pk=pk)
+        data = request.data
+        serializer = TournamentSerializer(tournament, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['DELETE'])
+@authentication_classes([])
+@permission_classes([])
+def delete_tournament(request, pk):
+    try:
+        tournament = get_object_or_404(Tournament, pk=pk)
+        tournament.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([])
 def owner_event(request,user_id):
+    time.sleep(2)
     user = User.objects.get(pk=user_id)
     events = Tournament.objects.filter(organizer=user).order_by('-created_at')
     serializer = TournamentSerializer(events, many=True)
@@ -87,7 +195,7 @@ def owner_event(request,user_id):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def events(request):
-    # time.sleep(1)
+    time.sleep(2)
     events = Tournament.objects.all().order_by('-created_at')[:10]
     serializer = TournamentSerializer(events, many=True)
     return Response(serializer.data)
@@ -96,13 +204,15 @@ def events(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_one_event(request, event_id):
+    time.sleep(2)  # Delay for testing purposes
     try:
-        event = Tournament.objects.get(id=event_id)
+        event = Tournament.objects.select_related('pool_space').get(id=event_id)
     except Tournament.DoesNotExist:
         return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = TournamentSerializer(event)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -123,9 +233,11 @@ def enroll_event(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_enrollments(request):
+    time.sleep(2)
     user = request.user
     enrollments = Enrollment.objects.filter(user=user)
     serializer = EnrollmentReadSerializer(enrollments, many=True)
@@ -173,6 +285,8 @@ def mpesa_callback(request):
     try:
         data = json.loads(request.body)
         stk_callback = data.get('Body', {}).get('stkCallback', {})
+
+        print("callback data", stk_callback)
 
         merchant_request_id = stk_callback.get('MerchantRequestID')
         checkout_request_id = stk_callback.get('CheckoutRequestID')

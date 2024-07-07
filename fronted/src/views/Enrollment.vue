@@ -1,32 +1,51 @@
 <template>
-    <div  class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-10">
+    <div  class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-10 ">
  <!-- component -->
-<div class="sm:px-6 w-full">
+<div class="sm:px-6 w-full ">
             <div class=" mb-5">
                 <div class="flex items-center justify-between">
                     <p class="focus:outline-none text-base dark:text-white sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">My Events</p>
                    
                 </div>
             </div>
-            <div class="dark:bg-slate-800 bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
+            <div class="dark:bg-slate-800 bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10 rounded-md">
                 <div class="text-center">
               
-                   <h1 class="text-xl dark:text-white font-semibold capitalize ">my registered tournaments</h1>
+                   <h1 class="text-xl dark:text-white font-semibold capitalize ">my Enrolled Tournaments</h1>
                 </div>
                 <div class="mt-7 overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <tbody  v-for="event in events" :key="event.id" >
+                        <tbody v-if="loading">
+                            <tr v-for="n in 5" :key="n" class="focus:outline-none h-16 border border-gray-100 rounded animate-pulse">
+                            <td class="pl-5">
+                                <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-5">
+                                <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-24">
+                                <div class="w-24 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-5">
+                                <div class="w-10 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-5">
+                                <div class="w-12 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-5">
+                                <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                            <td class="pl-4">
+                                <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
+                            </td>
+                           
+                            </tr>
+                        </tbody>
+                        <tbody  v-else >
                             
-                            <tr tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
+                            <tr v-for="event in events" :key="event.id"  tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
                                 <td>
-                                    <div class="ml-5">
-                                        <div class="bg-gray-200 rounded-sm w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
-                                            <input placeholder="checkbox" type="checkbox" class="focus:opacity-100 checkbox opacity-0 absolute cursor-pointer w-full h-full" />
-                                            <div class="check-icon hidden bg-indigo-700 text-white rounded-sm">
-                                               
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                 </td>
                                 <td class="">
                                     <div class="flex items-center pl-5 dark:text-white">
@@ -79,9 +98,7 @@
 
                                                             <td>
                                     <div class="relative px-5 pt-2 dark:text-white">
-                                        <button class="focus:ring-2 rounded-md focus:outline-none" role="button" aria-label="option">
-                                           ...
-                                        </button>
+                                       
                                         <div class="dropdown-content bg-white shadow w-24 absolute z-30 right-0 mr-6 hidden">
                                             <div tabindex="0" class="focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 py-4 px-4 cursor-pointer hover:text-white">
                                                 <p>Edit</p>

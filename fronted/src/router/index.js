@@ -7,6 +7,7 @@ import Manage from "@/views/owner/events/ManageEvents.vue";
 import ManagePool from "@/views/owner/pool/ManagePool.vue";
 import EventDetail from "@/views/owner/events/EventDetail.vue";
 import Login from '@/views/auth/login.vue';
+import AdminPool from '@/views/Admin/Pools.vue';
 import Register from '@/views/auth/register.vue';
 
 import { useUserStore } from '@/stores/user'; 
@@ -49,6 +50,13 @@ const router = createRouter({
           path: "/enrollment-list",
           name: "enrollment",
           component: Enroll
+        },
+
+        // admin
+        {
+          path: "/admin-manage-pool",
+          name: "adminPool",
+          component: AdminPool
         }
       ]
     },
