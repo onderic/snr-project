@@ -60,6 +60,7 @@ def get_user_pool_spaces(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_pool_spaces(request):
+    time.sleep(2)
     pool_spaces = PoolSpace.objects.all()
     serializer = PoolSpaceSerializer(pool_spaces, many=True)
     return Response(serializer.data)

@@ -8,6 +8,8 @@ import ManagePool from "@/views/owner/pool/ManagePool.vue";
 import EventDetail from "@/views/owner/events/EventDetail.vue";
 import Login from '@/views/auth/login.vue';
 import AdminPool from '@/views/Admin/Pools.vue';
+import Owners from '@/views/Admin/Owners.vue';
+import Events from '@/views/Admin/Events.vue';
 import Register from '@/views/auth/register.vue';
 
 import { useUserStore } from '@/stores/user'; 
@@ -57,6 +59,16 @@ const router = createRouter({
           path: "/admin-manage-pool",
           name: "adminPool",
           component: AdminPool
+        },
+        {
+          path: "/admin-owners",
+          name: "owners",
+          component: Owners
+        },
+        {
+          path: "/admin-manage-events",
+          name: "events",
+          component: Events
         }
       ]
     },

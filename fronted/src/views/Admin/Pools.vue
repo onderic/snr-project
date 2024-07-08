@@ -1,28 +1,52 @@
 <template>
     <div>
-      <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 mt-20 dark:bg-gray-800 dark:border-gray-700">
-        <div class="w-full mb-1">
-          <div class="mb-4">
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All Pool Spaces</h1>
-          </div>
+      <div>
+    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 mt-20 dark:bg-gray-800 dark:border-gray-700">
+      <div class="w-full mb-1">
+        <div class="mb-4">
+          <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All Owners</h1>
         </div>
       </div>
-      <div class="flex flex-col">
-        <div class="overflow-x-auto">
-          <div class="inline-block min-w-full align-middle">
-            <div class="overflow-hidden shadow">
-              <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
-                <thead class="bg-gray-100 dark:bg-gray-700">
-                  <tr>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Title</th>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Email</th>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Number</th>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Address</th>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Status</th>
-                    <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>
+    </div>
+    <div class="flex flex-col">
+      <div class="overflow-x-auto">
+        <div class="inline-block min-w-full align-middle">
+          <div class="overflow-hidden shadow">
+            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
+              <thead class="bg-gray-100 dark:bg-gray-700">
+                <tr>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Title</th>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Email</th>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Number</th>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Address</th>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Status</th>
+                  <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                <template v-if="loading">
+                  <tr v-for="n in 5" :key="n" class="animate-pulse">
+                    <td class="p-4">
+                      <div class="h-4 bg-gray-200 rounded dark:bg-gray-700 w-40 "></div>
+                    </td>
+                    <td class="p-4">
+                      <div class="h-4 bg-gray-200 rounded dark:bg-gray-700 w-40 "></div>
+                    </td>
+                    <td class="p-4">
+                      <div class="h-4 bg-gray-200 rounded dark:bg-gray-700 w-24 "></div>
+                    </td>
+                    <td class="p-4">
+                      <div class="h-24 bg-gray-200 rounded dark:bg-gray-700 w-40 "></div>
+                    </td>
+                    <td class="p-4">
+                      <div class="h-4 bg-gray-200 rounded dark:bg-gray-700 w-40 "></div>
+                    </td>
+                    <td class="p-4">
+                      <div class="h-8 bg-gray-200 rounded dark:bg-gray-700 w-24"></div>
+                    </td>
                   </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                </template>
+                <template v-else>
                   <tr v-for="poolSpace in poolSpaces" :key="poolSpace.id" class="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ poolSpace.title }}</td>
                     <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ poolSpace.email }}</td>
@@ -49,15 +73,15 @@
                       </button>
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            </div>
+                </template>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-  
-      <!-- Edit Modal -->
-      <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
+    </div>
+     <!-- Edit Modal -->
+     <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
         <div class="bg-white rounded-lg dark:bg-gray-700 w-1/2">
           <div class="p-4 border-b border-gray-200 dark:border-gray-600">
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit Pool Space</h3>
@@ -99,6 +123,8 @@
           </div>
         </div>
       </div>
+  </div>
+     
     </div>
   </template>
   

@@ -12,4 +12,6 @@ urlpatterns = [
     path('register/', api.register_user, name='register'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('users/owners/', api.get_owners, name='get_owners'),
 ]

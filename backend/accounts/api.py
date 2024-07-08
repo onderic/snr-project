@@ -70,6 +70,7 @@ def get_user_data(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_owners(request):
-    owners = User.objects.filter(is_owner=True)
+    time.sleep(2)
+    owners = User.objects.filter()
     serializer = UserSerializer(owners, many=True)
     return Response(serializer.data)
