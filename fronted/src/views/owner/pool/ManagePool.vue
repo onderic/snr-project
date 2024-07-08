@@ -82,14 +82,16 @@
               </div>
               <div class="mb-4">
                 <label for="status" class="block mb-2 text-sm font-medium text-gray-900  dark:text-gray-300">Status</label>
-                <select v-model="editForm.status" id="status" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
+                <input v-model="editForm.status" type="text" id="number" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-300 dark:text-white" readonly>
+              
               </div>
               <div class="flex justify-end space-x-2">
                 <button type="button" @click="closeEditModal" class="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-lg dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">Cancel</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg dark:bg-blue-500 dark:hover:bg-blue-700">Save</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg dark:bg-blue-500 dark:hover:bg-blue-700">
+
+                <v-icon v-if="loading" name="gi-spinning-blades" animation="spin"  scale="1"/> 
+                  Save
+                </button>
               </div>
             </form>
           </div>
@@ -103,11 +105,13 @@
   import { ref, onMounted } from 'vue';
   import { useLoading } from '@/composables/loading';
   import { useUserStore } from '@/stores/user';
+  import { useToast } from 'vue-toastify';
 
   const loading = useLoading();
   const poolSpaces = ref([]);
   const userStore = useUserStore();
   const isEditModalOpen = ref(false);
+  const toast = useToast();
   const editForm = ref({
     id: null,
     title: '',
@@ -138,15 +142,19 @@
   }
 
   async function deletePoolSpace(id) {
-    try {
-      await axios.delete(`pool-spaces/${id}/`, {
-        headers: {
-          Authorization: `Bearer ${userStore.user.access}`,
-        },
-      });
-      poolSpaces.value = poolSpaces.value.filter((poolSpace) => poolSpace.id !== id);
-    } catch (error) {
-      console.error('Error deleting pool space:', error.message);
+    if (window.confirm('Are you sure you want to delete this pool space?')) {
+      try {
+        const response = await axios.delete(`/delete-pool/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${userStore.user.access}`,
+          },
+        });
+        poolSpaces.value = poolSpaces.value.filter(poolSpace => poolSpace.id !== id);
+        toast.success('Pool space deleted successfully');
+      } catch (error) {
+        console.error('Error deleting pool space:', error.message);
+        toast.error('Failed to delete pool space');
+      }
     }
   }
 
@@ -170,7 +178,8 @@
 
   async function updatePoolSpace() {
     try {
-      const response = await axios.put(`pool-spaces/${editForm.value.id}/`, editForm.value, {
+      loading.value = true;
+      const response = await axios.put(`pool-spaces/${editForm.value.id}/update/`, editForm.value, {
         headers: {
           Authorization: `Bearer ${userStore.user.access}`,
         },
@@ -180,8 +189,11 @@
         poolSpaces.value[updatedPoolSpaceIndex] = response.data;
       }
       closeEditModal();
+      toast.success('Pool Space updated successfully');
     } catch (error) {
       console.error('Error updating pool space:', error.message);
+    }finally {
+      loading.value = false;
     }
   }
 

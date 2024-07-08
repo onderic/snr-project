@@ -11,7 +11,6 @@ from .forms import PoolForm
 from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer
 from .models import Enrollment, MpesaTransaction, PoolSpace,Tournament
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from math import radians, cos, sin, sqrt, atan2
 from geopy.distance import geodesic
 from accounts.models import User
 from .mpesa import LipaNaMpesa
@@ -47,7 +46,6 @@ def pool_spaces(request):
     serializer = PoolSpaceSerializer(sorted_pool_spaces, many=True)
     return Response(serializer.data)
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_pool_spaces(request):
@@ -66,6 +64,18 @@ def list_pool_spaces(request):
     serializer = PoolSpaceSerializer(pool_spaces, many=True)
     return Response(serializer.data)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_pool_space(request, pk):
+    try:
+        pool_space = PoolSpace.objects.get(pk=pk)
+    except PoolSpace.DoesNotExist:
+        return Response({"error": "Pool space not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    pool_space.delete()
+    return Response({"message": "Pool space deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def retrieve_pool_space(request, pk):
@@ -81,6 +91,7 @@ def retrieve_pool_space(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_pool_space(request, pk):
+    time.sleep(2)
     try:
         pool_space = PoolSpace.objects.get(pk=pk)
     except PoolSpace.DoesNotExist:

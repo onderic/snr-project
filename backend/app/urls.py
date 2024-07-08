@@ -9,6 +9,7 @@ urlpatterns = [
     path('pool-spaces/<int:pk>/', api.retrieve_pool_space, name='retrieve_pool_space'),
     path('pool-spaces/<int:pk>/update/', api.update_pool_space, name='update_pool_space'),
     path('user-pool-spaces/', api.get_user_pool_spaces, name='get_user_pool_spaces'),
+    path('delete-pool/<int:pk>/', api.delete_pool_space, name='delete_pool_space'),
 
     # tournaments
     path('tournaments_create/', api.create_tournament, name='tournaments_create'),

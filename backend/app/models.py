@@ -6,8 +6,8 @@ import uuid
 class PoolSpace(models.Model):
     title = models.CharField(max_length=255)
     email = models.EmailField()
-    number = models.CharField(max_length=50)
-    height = models.CharField(max_length=50)
+    number = models.CharField(max_length=50, blank=True)
+    height = models.CharField(max_length=50, blank=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     address = models.TextField()

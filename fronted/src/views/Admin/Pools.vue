@@ -66,30 +66,34 @@
             <form @submit.prevent="updatePoolSpace">
               <div class="mb-4">
                 <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
-                <input v-model="editForm.title" type="text" id="title" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required>
+                <input v-model="editForm.title" type="text" id="title" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
-                <input v-model="editForm.email" type="email" id="email" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required>
+                <input v-model="editForm.email" type="email" id="email" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Number</label>
-                <input v-model="editForm.number" type="text" id="number" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required>
+                <input v-model="editForm.number" type="text" id="number" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address</label>
-                <textarea v-model="editForm.address" id="address" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required></textarea>
+                <textarea v-model="editForm.address" id="address" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly></textarea>
               </div>
               <div class="mb-4">
-                <label for="status" class="block mb-2 text-sm font-medium text-gray-900  dark:text-gray-300">Status</label>
-                <select v-model="editForm.status" id="status" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" required>
+                <label for="status" class="block mb-2 text-sm font-medium text-gray-900  dark:text-gray-300">Approve</label>
+                <select v-model="editForm.status" id="status" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" readonly>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
               <div class="flex justify-end space-x-2">
                 <button type="button" @click="closeEditModal" class="px-4 py-2 text-sm font-medium text-gray-900 bg-gray-200 rounded-lg dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500">Cancel</button>
-                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg dark:bg-blue-500 dark:hover:bg-blue-700">Save</button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg dark:bg-blue-500 dark:hover:bg-blue-700">
+
+                  <v-icon v-if="loading" name="gi-spinning-blades" animation="spin"  scale="1"/> 
+                    Save
+                </button>
               </div>
             </form>
           </div>
@@ -103,11 +107,13 @@
   import { ref, onMounted } from 'vue';
   import { useLoading } from '@/composables/loading';
   import { useUserStore } from '@/stores/user';
+  import { useToast } from 'vue-toastify';
 
   const loading = useLoading();
   const poolSpaces = ref([]);
   const userStore = useUserStore();
   const isEditModalOpen = ref(false);
+  const toast = useToast();
   const editForm = ref({
     id: null,
     title: '',
@@ -138,17 +144,22 @@
   }
 
   async function deletePoolSpace(id) {
+  if (window.confirm('Are you sure you want to delete this pool space?')) {
     try {
-      await axios.delete(`pool-spaces/${id}/`, {
+      const response = await axios.delete(`/delete-pool/${id}/`, {
         headers: {
           Authorization: `Bearer ${userStore.user.access}`,
         },
       });
-      poolSpaces.value = poolSpaces.value.filter((poolSpace) => poolSpace.id !== id);
+      poolSpaces.value = poolSpaces.value.filter(poolSpace => poolSpace.id !== id);
+      toast.success('Pool space deleted successfully');
     } catch (error) {
       console.error('Error deleting pool space:', error.message);
+      toast.error('Failed to delete pool space');
     }
   }
+}
+
 
   function openEditModal(poolSpace) {
     // Populate editForm with the selected poolSpace data
@@ -170,7 +181,8 @@
 
   async function updatePoolSpace() {
   try {
-    const response = await axios.put(`pool-spaces/${editForm.value.id}/`, editForm.value, {
+    loading.value = true;
+    const response = await axios.put(`pool-spaces/${editForm.value.id}/update/`, editForm.value, {
       headers: {
         Authorization: `Bearer ${userStore.user.access}`,
       },
@@ -180,9 +192,13 @@
       poolSpaces.value[updatedPoolSpaceIndex] = response.data;
     }
     closeEditModal();
+    toast.success('Pool Space updated successfully');
   } catch (error) {
     console.error('Error updating pool space:', error.message);
   }
+  finally {
+      loading.value = false;
+    }
 }
 
 
