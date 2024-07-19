@@ -1,6 +1,6 @@
 <template>
-    <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-10">
-      <div class="sm:px-6 w-full">
+   <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-10">
+    <div class="sm:px-6 w-full">
         <div class="mb-5">
           <div class="flex items-center justify-between">
             <p class="focus:outline-none text-base dark:text-white sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">My Events</p>

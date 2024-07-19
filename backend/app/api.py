@@ -19,7 +19,7 @@ from .mpesa import LipaNaMpesa
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
-    time.sleep(2)
+    # time.sleep(2)
     user_lat = request.query_params.get('latitude')
     user_lng = request.query_params.get('longitude')
 
@@ -60,7 +60,7 @@ def get_user_pool_spaces(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_pool_spaces(request):
-    time.sleep(2)
+    # time.sleep(2)
     pool_spaces = PoolSpace.objects.all()
     serializer = PoolSpaceSerializer(pool_spaces, many=True)
     return Response(serializer.data)
@@ -92,7 +92,7 @@ def retrieve_pool_space(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_pool_space(request, pk):
-    time.sleep(2)
+    # time.sleep(2)
     try:
         pool_space = PoolSpace.objects.get(pk=pk)
     except PoolSpace.DoesNotExist:
@@ -196,7 +196,7 @@ def delete_tournament(request, pk):
 @authentication_classes([])
 @permission_classes([])
 def owner_event(request,user_id):
-    time.sleep(2)
+    # time.sleep(2)
     user = User.objects.get(pk=user_id)
     events = Tournament.objects.filter(organizer=user).order_by('-created_at')
     serializer = TournamentSerializer(events, many=True)
@@ -207,7 +207,7 @@ def owner_event(request,user_id):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def events(request):
-    time.sleep(2)
+    # time.sleep(2)
     events = Tournament.objects.all().order_by('-created_at')[:10]
     serializer = TournamentSerializer(events, many=True)
     return Response(serializer.data)
@@ -216,7 +216,7 @@ def events(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_one_event(request, event_id):
-    time.sleep(2)  # Delay for testing purposes
+    # time.sleep(2)  # Delay for testing purposes
     try:
         event = Tournament.objects.select_related('pool_space').get(id=event_id)
     except Tournament.DoesNotExist:
@@ -249,7 +249,7 @@ def enroll_event(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_enrollments(request):
-    time.sleep(2)
+    # time.sleep(2)
     user = request.user
     enrollments = Enrollment.objects.filter(user=user)
     serializer = EnrollmentReadSerializer(enrollments, many=True)
@@ -295,48 +295,51 @@ def pay_enrollment_fee(request, id):
 @permission_classes([AllowAny])
 def mpesa_callback(request):
     try:
-        data = json.loads(request.body)
-        stk_callback = data.get('Body', {}).get('stkCallback', {})
-
-        print("callback data", stk_callback)
+        callback_data = request.data
+        body = callback_data.get('Body')
+        
+        if not body:
+            return JsonResponse({'error': 'Body not found in request'}, status=400)
+        
+        stk_callback = body.get('stkCallback')
+        
+        if not stk_callback:
+            return JsonResponse({'error': 'stkCallback not found in Body'}, status=400)
 
         merchant_request_id = stk_callback.get('MerchantRequestID')
         checkout_request_id = stk_callback.get('CheckoutRequestID')
         result_code = stk_callback.get('ResultCode')
-        result_description = stk_callback.get('ResultDesc')
 
-        callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
-        amount = next((item['Value'] for item in callback_metadata if item['Name'] == 'Amount'), None)
-        mpesa_receipt_number = next((item['Value'] for item in callback_metadata if item['Name'] == 'MpesaReceiptNumber'), None)
-        transaction_date = next((item['Value'] for item in callback_metadata if item['Name'] == 'TransactionDate'), None)
-        phone_number = next((item['Value'] for item in callback_metadata if item['Name'] == 'PhoneNumber'), None)
+        if not merchant_request_id or not checkout_request_id or result_code is None:
+            return JsonResponse({'error': 'Incomplete stkCallback data'}, status=400)
 
-        transaction = MpesaTransaction.objects.filter(merchant_request_id=merchant_request_id).first()
+        transaction = MpesaTransaction.objects.filter(checkout_request_id=checkout_request_id).first()
 
         if transaction:
-            if transaction.is_processed:
-                return Response({'error': 'Transaction has already been processed'}, status=status.HTTP_400_BAD_REQUEST)
+            transaction.merchant_request_id = merchant_request_id
             transaction.checkout_request_id = checkout_request_id
             transaction.result_code = result_code
-            transaction.result_description = result_description
-            transaction.amount = amount
-            transaction.mpesa_receipt_number = mpesa_receipt_number
-            transaction.transaction_date = transaction_date
-            transaction.phone_number = phone_number
+            transaction.result_description = stk_callback.get('ResultDesc')
+
+            if result_code == 0:
+                transaction.status = 'success'
+                callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+                for item in callback_metadata:
+                    if item.get('Name') == 'Amount':
+                        transaction.amount = item.get('Value')
+                    elif item.get('Name') == 'MpesaReceiptNumber':
+                        transaction.mpesa_receipt_number = item.get('Value')
+                    elif item.get('Name') == 'TransactionDate':
+                        transaction.transaction_date = item.get('Value')
+                    elif item.get('Name') == 'PhoneNumber':
+                        transaction.phone_number = item.get('Value')
+            else:
+                transaction.status = 'failure'
+
             transaction.is_processed = True
             transaction.save()
 
-            # Update the enrollment status to paid
-            if result_code == 0:
-                enrollment = transaction.enrollment
-                enrollment.paid = True
-                enrollment.save()
-
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'status': 'success'}, status=200)
 
     except Exception as e:
-        # Handle exceptions gracefully
-        print(f"Error processing M-Pesa callback: {str(e)}")
-        return Response({'error': 'Error processing callback'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': str(e)}, status=500)

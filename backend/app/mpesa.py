@@ -84,14 +84,16 @@ class LipaNaMpesa:
             headers=self.headers
         )
         response.raise_for_status()
+        
         merchant_request_id = response.json().get('MerchantRequestID')
+        checkout_request_id = response.json().get('CheckoutRequestID')
 
         enrollment = Enrollment.objects.get(id=enrollment_id)
         
         transaction = MpesaTransaction.objects.create(
-            merchant_request_id= merchant_request_id,
-            enrollment=enrollment
+            merchant_request_id=merchant_request_id,
+            checkout_request_id=checkout_request_id,
+            enrollment=enrollment,
+            is_processed=False 
         )
-        print("Transaction made", transaction)
         return response.json()
-    

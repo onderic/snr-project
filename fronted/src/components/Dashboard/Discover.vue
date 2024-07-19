@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div v-if="loading">
       <Pool />
     </div>
@@ -33,13 +33,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useLoading } from '@/composables/loading';
 import { useToast } from 'vue-toastify';
-import GoogleMap from "@/components/dahsboard/Map.vue";
+import GoogleMap from "@/components/Dashboard/Map.vue";
 import Pool from '@/components/Skeleton/Pool.vue';
-
 
 const poolSpaces = ref([]);
 const loading = useLoading();
@@ -48,7 +47,7 @@ const toast = useToast();
 const defaultLatitude = 1.3028463; 
 const defaultLongitude = 36.5355534;
 
-async function getPoolSpaces(latitude, longitude) {
+async function getPoolSpaces(latitude = defaultLatitude, longitude = defaultLongitude) {
   if (latitude === undefined || longitude === undefined) {
     console.error('Latitude and longitude are required to fetch pool spaces.');
     return;
@@ -63,8 +62,10 @@ async function getPoolSpaces(latitude, longitude) {
       }
     });
     poolSpaces.value = response.data;
+   
   } catch (error) {
     console.error('Error fetching pool spaces:', error.message);
+    toast.error('Failed to fetch pool spaces.');
   } finally {
     loading.value = false;
   }
@@ -81,19 +82,19 @@ function getUserLocation() {
       error => {
         console.error('Error getting user location:', error.message);
         toast.error('Location access denied by user.');
-        getPoolSpaces(defaultLatitude, defaultLongitude);
+        getPoolSpaces();
       }
     );
   } else {
     console.error('Geolocation is not supported by this browser.');
     toast.error('Geolocation is not supported by this browser.');
-    getPoolSpaces(defaultLatitude, defaultLongitude);
+    getPoolSpaces();
   }
 }
 
 onMounted(() => {
+  getPoolSpaces()
+  poolSpaces.value = [];
   getUserLocation();
 });
-
-
 </script>

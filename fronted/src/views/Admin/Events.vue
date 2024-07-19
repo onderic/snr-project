@@ -23,7 +23,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                   <template v-if="loading">
-                    <tr v-for="n in 5" :key="n" class="animate-pulse">
+                    <tr v-for="n in 4" :key="n" class="animate-pulse">
                       <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div class="h-4 bg-gray-200 rounded dark:bg-gray-700 w-36 "></div>
                       </td>

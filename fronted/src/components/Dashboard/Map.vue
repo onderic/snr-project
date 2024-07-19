@@ -1,14 +1,22 @@
 <template>
   <div>
-    <!-- Small Map -->
-    <iframe
-      width="500"
-      height="450"
-      frameborder="0"
-      style="border:0"
-      :src="mapUrl"
-      allowfullscreen
-    ></iframe>
+    <div class="relative">
+      <!-- Loader for small map iframe -->
+      <div v-if="mapLoading" class="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75 z-10">
+        <v-icon name="gi-spinning-blades" animation="spin" scale="2" />
+      </div>
+
+      <!-- Small Map -->
+      <iframe
+        width="500"
+        height="450"
+        frameborder="0"
+        style="border:0"
+        :src="mapUrl"
+        @load="onIframeLoad"
+        allowfullscreen
+      ></iframe>
+    </div>
 
     <!-- Toggle Button -->
     <div class="flex justify-between p-4">
@@ -31,13 +39,19 @@
             </button>
           </div>
           <!-- Modal body -->
-          <div class="p-4 md:p-5 space-y-4">
+          <div class="relative p-4 md:p-5 space-y-4">
+            <!-- Loader for modal iframe -->
+            <div v-if="mapLoading" class="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75 z-10">
+              <v-icon name="gi-spinning-blades" animation="spin" scale="2" />
+            </div>
+
             <iframe
               width="100%"
               height="650"
               frameborder="0"
               style="border:0"
               :src="mapUrl"
+              @load="onIframeLoad"
               allowfullscreen
             ></iframe>
           </div>
@@ -49,7 +63,7 @@
 
 <script setup>
 import config from '../../../config'; 
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed } from 'vue';
 
 const apiKey = config.Googl_API_KEY;
 
@@ -59,20 +73,25 @@ const props = defineProps({
     required: true
   },
   longitude: {
-
     type: Number,
     required: true
   }
 });
 
 const isModalOpen = ref(false);
+const mapLoading = ref(true);
 
 function openModal() {
   isModalOpen.value = true;
+  mapLoading.value = true; // Reset loading state when opening the modal
 }
 
 function closeModal() {
   isModalOpen.value = false;
+}
+
+function onIframeLoad() {
+  mapLoading.value = false;
 }
 
 const mapUrl = computed(() => {
@@ -92,6 +111,9 @@ const mapUrl = computed(() => {
 }
 .z-50 {
   z-index: 50;
+}
+.absolute {
+  position: absolute;
 }
 .bg-opacity-75 {
   background-opacity: 0.75;

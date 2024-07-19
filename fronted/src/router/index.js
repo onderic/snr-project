@@ -26,7 +26,11 @@ const router = createRouter({
         {
           path: '/dashboard',
           name: 'dashboard',
-          component: Dashboard
+          component: Dashboard,
+          beforeEnter: (to, from, next) => {
+            to.meta.currentComponent = 'Discover';
+            next();
+          },
         },
         {
           path: '/add-pool/location',
