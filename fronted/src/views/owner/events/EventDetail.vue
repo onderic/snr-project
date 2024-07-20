@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div v-if="!event" class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-20">
+  <div v-if="!event" class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-20">
   <div>
     <div class="bg-white dark:bg-slate-800 shadow lg:rounded-b-2xl lg:-mt-10 dark:bg-dark2">
       <div class="relative overflow-hidden w-full">
@@ -60,7 +60,7 @@
 </div>
 
 
-  <div v-else class="2xl:max-w-[1220px] max-w-[1065px] mx-auto mt-20">
+  <div v-else class="2xl:max-w-[1220px] max-w-[1065px] mx-auto lg:mt-20 mt-4">
     <div>
       <div class="bg-white dark:bg-slate-800 shadow lg:rounded-b-2xl lg:-mt-10 dark:bg-dark2">
         <div class="relative overflow-hidden w-full">

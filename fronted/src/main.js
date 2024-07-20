@@ -39,6 +39,7 @@ import { CoHome,
     CoEventbrite,
     HiStatusOffline,
     BiImageFill,
+    MdDashboard,
     IoCreate
  } from "oh-vue-icons/icons";
 
@@ -69,6 +70,7 @@ addIcons(CoHome,
     CoEventbrite,
     HiStatusOffline,
     BiImageFill,
+    MdDashboard,
     IoCreate
 );
 

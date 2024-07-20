@@ -1,7 +1,3 @@
-from datetime import datetime
-import json
-import time
-import uuid
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -14,6 +10,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from geopy.distance import geodesic
 from accounts.models import User
 from .mpesa import LipaNaMpesa
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from datetime import datetime, timedelta
+from django.utils.timezone import now
+from rest_framework.response import Response
 
 
 @api_view(['GET'])
@@ -229,7 +229,7 @@ def get_one_event(request, event_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def enroll_event(request):
-    time.sleep(1)
+    # time.sleep(1)
     serializer = EnrollmentWriteSerializer(data=request.data)
     
     if serializer.is_valid():
@@ -297,49 +297,126 @@ def mpesa_callback(request):
     try:
         callback_data = request.data
         body = callback_data.get('Body')
-        
+
         if not body:
             return JsonResponse({'error': 'Body not found in request'}, status=400)
-        
+
         stk_callback = body.get('stkCallback')
-        
-        if not stk_callback:
-            return JsonResponse({'error': 'stkCallback not found in Body'}, status=400)
 
         merchant_request_id = stk_callback.get('MerchantRequestID')
         checkout_request_id = stk_callback.get('CheckoutRequestID')
         result_code = stk_callback.get('ResultCode')
 
-        if not merchant_request_id or not checkout_request_id or result_code is None:
-            return JsonResponse({'error': 'Incomplete stkCallback data'}, status=400)
-
         transaction = MpesaTransaction.objects.filter(checkout_request_id=checkout_request_id).first()
 
-        if transaction:
-            transaction.merchant_request_id = merchant_request_id
-            transaction.checkout_request_id = checkout_request_id
-            transaction.result_code = result_code
-            transaction.result_description = stk_callback.get('ResultDesc')
+        if not transaction:
+            return JsonResponse({'error': 'Transaction not found'}, status=404)
 
-            if result_code == 0:
-                transaction.status = 'success'
-                callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
-                for item in callback_metadata:
-                    if item.get('Name') == 'Amount':
-                        transaction.amount = item.get('Value')
-                    elif item.get('Name') == 'MpesaReceiptNumber':
-                        transaction.mpesa_receipt_number = item.get('Value')
-                    elif item.get('Name') == 'TransactionDate':
-                        transaction.transaction_date = item.get('Value')
-                    elif item.get('Name') == 'PhoneNumber':
-                        transaction.phone_number = item.get('Value')
-            else:
-                transaction.status = 'failure'
+        if transaction.is_processed:
+            return JsonResponse({'error': 'Transaction already processed'}, status=400)
 
-            transaction.is_processed = True
-            transaction.save()
+        transaction.merchant_request_id = merchant_request_id
+        transaction.checkout_request_id = checkout_request_id
+        transaction.result_code = result_code
+        transaction.result_description = stk_callback.get('ResultDesc')
+
+        if result_code == 0:
+            transaction.status = 'success'
+            callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+            for item in callback_metadata:
+                if item.get('Name') == 'Amount':
+                    transaction.amount = item.get('Value')
+                elif item.get('Name') == 'MpesaReceiptNumber':
+                    transaction.mpesa_receipt_number = item.get('Value')
+                elif item.get('Name') == 'TransactionDate':
+                    transaction.transaction_date = item.get('Value')
+                elif item.get('Name') == 'PhoneNumber':
+                    transaction.phone_number = item.get('Value')
+            
+            # Update the corresponding Enrollment object
+            enrollment = get_object_or_404(Enrollment, id=transaction.enrollment.id)
+            enrollment.paid = True
+            enrollment.save()
+        else:
+            transaction.status = 'failure'
+
+        transaction.is_processed = True
+        transaction.save()
 
         return JsonResponse({'status': 'success'}, status=200)
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+ 
+ 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def revenue_overview(request):
+    """
+    Fetch the total enrollment fees for daily, weekly (last 7 days), monthly periods,
+    and daily revenue for the past 5 weekdays (Monday to Friday) where `paid` is True.
+    """
+    # Get date from query parameters or use current date
+    date = request.query_params.get('date')
+    if date:
+        try:
+            date = datetime.strptime(date, '%Y-%m-%d').date()
+        except ValueError:
+            return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=400)
+    else:
+        date = now().date()
+
+    # Define time periods
+    start_of_today = datetime.combine(date, datetime.min.time())
+    end_of_today = start_of_today + timedelta(days=1)
+
+    start_of_week = date - timedelta(days=date.weekday())
+    end_of_week = start_of_week + timedelta(weeks=1)
+
+    start_of_month = date.replace(day=1)
+    next_month = start_of_month.replace(day=28) + timedelta(days=4)  # move to the next month
+    end_of_month = next_month - timedelta(days=next_month.day)
+
+    start_of_week_range = date - timedelta(days=date.weekday())
+    end_of_week_range = start_of_week_range + timedelta(days=5)  # Friday of the current week
+
+    def get_total_fee(start_date, end_date):
+        enrollments = Enrollment.objects.filter(
+            paid=True,
+            enrolled_at__range=(start_date, end_date)
+        ).select_related('tournament')
+        total_fee = enrollments.aggregate(
+            total_fee=Sum(
+                ExpressionWrapper(
+                    F('tournament__enrollment_fee'),
+                    output_field=DecimalField()
+                )
+            )
+        )['total_fee'] or 0
+        return total_fee
+
+    def get_daily_fees(start_date, end_date):
+        daily_fees = []
+        current_date = start_date
+        while current_date < end_date:
+            next_date = current_date + timedelta(days=1)
+            total_fee = get_total_fee(current_date, next_date)
+            daily_fees.append(str(total_fee))
+            current_date = next_date
+        return daily_fees
+
+    # Calculate total fees for different periods
+    daily_fee = get_total_fee(start_of_today, end_of_today)
+    weekly_fee = get_total_fee(start_of_week, end_of_today)
+    monthly_fee = get_total_fee(start_of_month, end_of_today)
+    daily_fees = get_daily_fees(start_of_week_range, end_of_week_range)
+    
+    # Prepare response data
+    response_data = {
+        'daily_fee': str(daily_fee),
+        'weekly_fee': str(weekly_fee),
+        'monthly_fee': str(monthly_fee),
+        'daily_fees': daily_fees
+    }
+    
+    return Response(response_data)

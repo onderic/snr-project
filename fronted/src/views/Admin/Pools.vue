@@ -1,10 +1,10 @@
 <template>
-    <div>
+   <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto lg:mt-20 mt-4">
       <div>
-    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 mt-20 dark:bg-gray-800 dark:border-gray-700">
+    <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200  dark:bg-gray-800 dark:border-gray-700">
       <div class="w-full mb-1">
         <div class="mb-4">
-          <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All Owners</h1>
+          <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All Pool Spaces</h1>
         </div>
       </div>
     </div>
@@ -81,6 +81,7 @@
       </div>
     </div>
      <!-- Edit Modal -->
+      
      <div v-if="isEditModalOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
         <div class="bg-white rounded-lg dark:bg-gray-700 w-1/2">
           <div class="p-4 border-b border-gray-200 dark:border-gray-600">
@@ -90,23 +91,23 @@
             <form @submit.prevent="updatePoolSpace">
               <div class="mb-4">
                 <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
-                <input v-model="editForm.title" type="text" id="title" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
+                <input v-model="editForm.title" type="text" id="title" class="w-full p-2 border-gray-300 rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</label>
-                <input v-model="editForm.email" type="email" id="email" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
+                <input v-model="editForm.email" type="email" id="email" class="w-full p-2 border-gray-300 rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Number</label>
-                <input v-model="editForm.number" type="text" id="number" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
+                <input v-model="editForm.number" type="text" id="number" class="w-full p-2 border-gray-300 rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly>
               </div>
               <div class="mb-4">
                 <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address</label>
-                <textarea v-model="editForm.address" id="address" class="w-full p-2 border rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly></textarea>
+                <textarea v-model="editForm.address" id="address" class="w-full p-2 border-gray-300 rounded-lg dark:bg-gray-400 bg-gray-100 dark:text-white" readonly></textarea>
               </div>
               <div class="mb-4">
                 <label for="status" class="block mb-2 text-sm font-medium text-gray-900  dark:text-gray-300">Approve</label>
-                <select v-model="editForm.status" id="status" class="w-full p-2 border rounded-lg dark:bg-gray-600 dark:text-white" readonly>
+                <select v-model="editForm.status" id="status" class="w-full p-2 border-gray-300 rounded-lg dark:bg-gray-600 dark:text-white" readonly>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>

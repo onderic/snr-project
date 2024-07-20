@@ -1,47 +1,35 @@
 <template>
-  <div class="max-w-[680px] mx-auto">
-    <!-- feed story -->
-    <div class="md:max-w-[580px] mx-auto flex-1 xl:space-y-6 space-y-3 mt-28">
-      <div class="flex flex-row">
-        <div class="lg:flex gap-16">
-          <div class="flex-1 max-w-[1280px] mx-auto">
-            <h3 class="dark:text-white font-bold capitalize mb-4 text-xl">
-              COMPETE. SCORE. WIN. REPEAT.
-            </h3>
-            <div class="flex mb-6">
-              <div class="card flex justify-center gap-4">
-                <button class="btn" @click="updateComponent('Discover')">
-                  <v-icon name="co-home" /> Discover
-                </button>
-                <button class="btn" @click="updateComponent('Tournaments')">
-                  <v-icon name="io-locate-outline" animation="spin" scale="" />
-                  Tournaments
-                </button>
-                <div>
-                  <Toast position="bottom-right" group="br" />
-                  <ConfirmDialog group="positioned"></ConfirmDialog>
-                  <div>
-                    <router-link to="/add-pool/location">
-                      <button class="btn p-2">
-                        <v-icon name="io-create-outline" />
-                        Create
-                      </button>
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="scrollable-container">
-              <component :is="currentComponent" />
-            </div>
-          </div>
+  <div class="flex flex-col lg:flex-row gap-12 2xl:gap-16 max-w-[1065px] mx-auto lg:mt-16 mt-4">
+    <div class="w-full lg:w-2/3">
+      <!-- feed story -->
+      <div class="flex-1 xl:space-y-6 space-y-3">
+        <h3 class="dark:text-white font-bold capitalize mb-4 text-xl">
+          COMPETE. SCORE. WIN. REPEAT.
+        </h3>
+        <div class="flex mb-6 flex-wrap lg:gap-8 gap-1 justify-center lg:justify-start">
+          <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm lg:px-5 px-2 py-2.5 text-center me-2 mb-2" @click="updateComponent('Discover')">
+            <v-icon name="co-home" /> Discover
+          </button>
+          <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm lg:px-5 px-2 py-2.5 text-center me-2 mb-2" @click="updateComponent('Tournaments')">
+            <v-icon name="io-locate-outline" animation="spin" scale="" />
+            Tournaments
+          </button>
+          <router-link to="/add-pool/location">
+            <button class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm lg:px-5 px-2 py-2.5 text-center me-2 mb-2 p-2">
+              <v-icon name="io-create-outline" />
+              Create
+            </button>
+          </router-link>
         </div>
-        <div class="absolute right-32 mt-16 max-w-[1080px] mx-auto hidden lg:block">
-          <div class="lg:space-y-6 space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6">
-            <LatestTournaments />
-            <UpcomingTournaments />
-          </div>
+        <div class="scrollable-container">
+          <component :is="currentComponent" />
         </div>
+      </div>
+    </div>
+    <div class="w-full lg:w-1/3 lg:ml-20 mt-10 lg:mt-28">
+      <div class="space-y-4 lg:space-y-6">
+        <LatestTournaments />
+        <UpcomingTournaments />
       </div>
     </div>
   </div>

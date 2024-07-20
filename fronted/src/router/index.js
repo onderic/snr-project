@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import User from '@/layouts/User.vue';
+import Dash from '@/layouts/Dashboard.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import Enroll from '@/views/Enrollment.vue';
 import AddPool from "@/views/owner/pool/AddPoool.vue";
@@ -11,6 +12,9 @@ import AdminPool from '@/views/Admin/Pools.vue';
 import Owners from '@/views/Admin/Owners.vue';
 import Events from '@/views/Admin/Events.vue';
 import Register from '@/views/auth/register.vue';
+
+import AdminDashboard from '@/views/Admin/Dashboard.vue';
+import OwenrDashboard from '@/views/owner/Dashboard.vue';
 
 import { useUserStore } from '@/stores/user'; 
 
@@ -57,6 +61,12 @@ const router = createRouter({
           name: "enrollment",
           component: Enroll
         },
+        {
+          path: "/owner-dashboard",
+          name: "owenerDashboard",
+          component: OwenrDashboard
+        },
+
 
         // admin
         {
@@ -73,7 +83,12 @@ const router = createRouter({
           path: "/admin-manage-events",
           name: "events",
           component: Events
-        }
+        },
+        {
+          path: "/admin-dashboard",
+          name: "adminDashboard",
+          component: AdminDashboard
+        },
       ]
     },
     {

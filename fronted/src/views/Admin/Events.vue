@@ -1,14 +1,15 @@
 <template>
-    <div>
-      <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 mt-20 dark:bg-gray-800 dark:border-gray-700">
+  <div class="2xl:max-w-[1220px] max-w-[1065px] mx-auto lg:mt-20 mt-4">
+     
+      <div class="flex flex-col ">
+        <div class="overflow-x-auto  rounded-md ">
+          <div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200  dark:bg-gray-800 dark:border-gray-700">
         <div class="w-full mb-1">
           <div class="mb-4">
             <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Latest Events</h1>
           </div>
         </div>
       </div>
-      <div class="flex flex-col">
-        <div class="overflow-x-auto">
           <div class="inline-block min-w-full align-middle">
             <div class="overflow-hidden shadow">
               <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">

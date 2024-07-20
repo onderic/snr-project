@@ -8,8 +8,7 @@
 
       <!-- Small Map -->
       <iframe
-        width="500"
-        height="450"
+        class="w-full h-64 sm:h-96 md:h-80 lg:h-96 xl:h-112"
         frameborder="0"
         style="border:0"
         :src="mapUrl"
@@ -46,8 +45,7 @@
             </div>
 
             <iframe
-              width="100%"
-              height="650"
+              class="w-full h-96 md:h-[650px]"
               frameborder="0"
               style="border:0"
               :src="mapUrl"

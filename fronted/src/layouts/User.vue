@@ -13,11 +13,12 @@
         <HeaderArea/>
 
         <!-- Main Content -->
-        <main class="2xl:ml-[--w-side] xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
-          <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto">
+        <div class="p-4 sm:ml-64">
+          <div class=" border-gray-200 border-none rounded-lg dark:border-gray-700">
             <router-view />
           </div>
-        </main>
+        </div>
+        
       </div>
     </div>
   </div>
