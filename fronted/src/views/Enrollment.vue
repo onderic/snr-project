@@ -14,9 +14,9 @@
                    <h1 class="text-xl dark:text-white font-semibold capitalize ">my Enrolled Tournaments</h1>
                 </div>
                 <div class="mt-7 overflow-x-auto">
-                    <table class="w-full whitespace-nowrap">
+                    <table class="w-full">
                         <tbody v-if="loading">
-                            <tr v-for="n in 5" :key="n" class="focus:outline-none h-16 border border-gray-100 rounded animate-pulse">
+                            <tr v-for="n in 5" :key="n" class="focus:outline-none h-16 rounded animate-pulse">
                             <td class="pl-5">
                                 <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
                             </td>
@@ -43,7 +43,7 @@
                         </tbody>
                         <tbody  v-else >
                             
-                            <tr v-for="event in events" :key="event.id"  tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
+                            <tr v-for="event in events" :key="event.id"  tabindex="0" class="focus:outline-none h-16 rounded">
                                 <td>
                                   
                                 </td>
@@ -69,13 +69,21 @@
                                     </div>
                                 </td>
                                 <td class="pl-5">
-                                    <button class="py-3 px-3 text-sm focus:outline-none leading-none text-green-700 bg-green-100 rounded">Starts On {{event.tournament.start_time}}</button>
+                                    <button class="py-3 px-3 text-sm focus:outline-none leading-none text-green-500 rounded"><span class="dark:text-white text-gray-700">Starts On</span> {{event.tournament.start_time}}</button>
                                 </td>
                                 <td class="pl-5">
                                     <div class="flex items-center dark:text-white">
                                         
                                         <p class="text-sm leading-none text-gray-600 dark:text-white ml-2">Ksh {{event.tournament.enrollment_fee}}</p>
                                     </div>
+                                </td>
+                                <td class="pl-4">
+                                    <a :class="{ 
+                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none text-green-500 ': event.paid, 
+                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none  text-gray-300': !event.paid 
+                                    }">
+                                        {{ event.paid ? 'Complete' : 'Incomplete' }}
+                                    </a>
                                 </td>
                                 <td class="pl-5">
                                     <div class="flex items-center dark:text-white">
@@ -86,17 +94,7 @@
                                     </div>
                                 </td>
 
-                               
-                                <td class="pl-4">
-                                    <button :class="{ 
-                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-green-500 text-white': event.paid, 
-                                        'px-4 py-2 rounded-lg font-semibold focus:outline-none bg-gray-300 text-gray-700': !event.paid 
-                                    }">
-                                        {{ event.paid ? 'Complete' : 'Incomplete' }}
-                                    </button>
-                                </td>
-
-                                                            <td>
+                                     <td>
                                     <div class="relative px-5 pt-2 dark:text-white">
                                        
                                         <div class="dropdown-content bg-white shadow w-24 absolute z-30 right-0 mr-6 hidden">

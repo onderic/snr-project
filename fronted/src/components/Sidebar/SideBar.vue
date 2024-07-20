@@ -149,6 +149,6 @@
   const handleLogout = () => {
     userStore.removeToken();
     toast.success('Logged out successfully!');
-    router.push('/dashboard');
+    router.push('/');
   };
 </script>

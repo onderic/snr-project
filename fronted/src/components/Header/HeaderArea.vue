@@ -25,9 +25,9 @@
           </div>
         </div>
         <div class="flex-1 relative">
-          <div class="max-w-[1220px] mx-auto flex items-center">
+          <div class="max-w-[1220px] mx-auto flex items-center py-6">
             <!-- search -->
-            <SearchBar />
+            <!-- <SearchBar /> -->
 
             <!-- <div
               id="search--box"

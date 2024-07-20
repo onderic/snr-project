@@ -15,6 +15,7 @@ import Register from '@/views/auth/register.vue';
 
 import AdminDashboard from '@/views/Admin/Dashboard.vue';
 import OwenrDashboard from '@/views/owner/Dashboard.vue';
+import Home from '@/views/index.vue';
 
 import { useUserStore } from '@/stores/user'; 
 
@@ -22,7 +23,21 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '',
+      path: "",
+      name: "/",
+      component: Home
+    },
+    {
+      path: "/auth/login",
+      name: "login",
+      component: Login,
+    },
+    {
+      path: "/auth/register",
+      name: "register",
+      component: Register,
+    },
+    {
       redirect: '/dashboard',
       component: User,
       meta: { requiresAuth: true },
@@ -91,16 +106,7 @@ const router = createRouter({
         },
       ]
     },
-    {
-      path: "/auth/login",
-      name: "login",
-      component: Login,
-    },
-    {
-      path: "/auth/register",
-      name: "register",
-      component: Register,
-    },
+  
   ]
 });
 

@@ -8,7 +8,7 @@
             class="flex flex-col gap-2 h-40 rounded-xl shadow-md p-6 w-full bg-white dark:bg-gray-700 bg-opacity-30 backdrop-filter backdrop-blur-lg"
           >
             <div class="font-semibold text-lg dark:text-white">Today</div>
-            <div class="font-semibold text-5xl tracking-tight dark:text-white">${{ totals.daily.toFixed(2) }}</div>
+            <div class="font-semibold text-3xl tracking-tight dark:text-white">KES {{ totals.daily.toFixed(2) }}</div>
             <div class="font-normal dark:text-gray-400">Gross volume</div>
           </div>
   
@@ -17,7 +17,7 @@
             class="flex flex-col gap-2 h-40 rounded-xl shadow-md p-6 w-full bg-white dark:bg-gray-700 bg-opacity-30 backdrop-filter backdrop-blur-lg"
           >
             <div class="font-semibold text-lg dark:text-white">Last Week</div>
-            <div class="font-semibold text-5xl tracking-tight dark:text-white">${{ totals.weekly.toFixed(2) }}</div>
+            <div class="font-semibold text-3xl tracking-tight dark:text-white">KES {{ totals.weekly.toFixed(2) }}</div>
             <div class="font-normal dark:text-gray-400">Gross volume</div>
           </div>
   
@@ -26,11 +26,11 @@
             class="flex flex-col gap-2 h-40 rounded-xl shadow-md p-6 w-full bg-white dark:bg-gray-700 bg-opacity-30 backdrop-filter backdrop-blur-lg"
           >
             <div class="font-semibold text-lg dark:text-white">Last Month</div>
-            <div class="font-semibold text-5xl tracking-tight dark:text-white">${{ totals.monthly.toFixed(2) }}</div>
+            <div class="font-semibold text-3xl tracking-tight dark:text-white">KES {{ totals.monthly.toFixed(2) }}</div>
             <div class="font-normal dark:text-gray-400">Gross volume</div>
           </div>
         </div>
-        <div class="mt-10 rounded-lg shadow-md p-6">
+        <div class="mt-10 rounded-lg dark:bg-gray-900 shadow-md p-6">
           <h1 class="mb-10 text-3xl font-serif dark:text-white">Revenue Overview</h1>
           <div class="">
             <ChartComponent/>
@@ -59,9 +59,9 @@
       const data = response.data;
   
       totals.value = {
-        daily: parseFloat(data.daily_fee),
-        weekly: parseFloat(data.weekly_fee),
-        monthly: parseFloat(data.monthly_fee)
+        daily: parseFloat(data.daily_total),
+        weekly: parseFloat(data.weekly_total),
+        monthly: parseFloat(data.monthly_total)
       };
 
     } catch (error) {

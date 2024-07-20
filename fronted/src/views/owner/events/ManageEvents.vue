@@ -21,7 +21,7 @@
           <div class="mt-7 overflow-x-auto">
             <table class="w-full whitespace-nowrap">
               <tbody v-if="loading">
-                <tr v-for="n in 5" :key="n" class="focus:outline-none h-16 border border-gray-100 rounded animate-pulse">
+                <tr v-for="n in 5" :key="n" class="focus:outline-none h-16  rounded animate-pulse">
                   <td class="pl-5">
                     <div class="w-32 h-5 bg-gray-300 rounded-sm"></div>
                   </td>
@@ -49,15 +49,8 @@
                 </tr>
               </tbody>
               <tbody v-else>
-                <tr v-for="event in events" :key="event.id" tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
-                  <td>
-                    <div class="ml-5">
-                      <div class="bg-gray-200 rounded-sm w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
-                        <input placeholder="checkbox" type="checkbox" class="focus:opacity-100 checkbox opacity-0 absolute cursor-pointer w-full h-full" />
-                        <div class="check-icon hidden bg-indigo-700 text-white rounded-sm"></div>
-                      </div>
-                    </div>
-                  </td>
+                <tr v-for="event in events" :key="event.id" tabindex="0" class="focus:outline-none h-16  rounded">
+                
                   <td class="">
                     <div class="flex items-center pl-5 dark:text-white">
                       <p class="text-base font-medium leading-none text-gray-700 dark:text-white mr-2">{{ event.title }}</p>

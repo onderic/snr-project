@@ -14,7 +14,7 @@ from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from rest_framework.response import Response
-from django.utils import timezone
+from .utils import get_totals  
 
 
 @api_view(['GET'])
@@ -351,17 +351,12 @@ def mpesa_callback(request):
  
 
 def daily_revenue_graph(request):
-    # Aggregate the total enrollment fees by day
     data = Enrollment.objects.filter(paid=True) \
         .select_related('tournament') \
         .values('enrolled_at') \
         .annotate(total_revenue=Sum('tournament__enrollment_fee')) \
         .order_by('enrolled_at')
-
-    # Debugging: Print raw data
-    print("Aggregated Data:", list(data))
-
-    # Define the order of days of the week
+    
     day_order = {
         'Monday': 0,
         'Tuesday': 1,
@@ -402,6 +397,15 @@ def daily_revenue_graph(request):
 
     return JsonResponse(result)
 
-def revenue_overview(request):
 
-    return
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def revenue_overview(request):
+    totals = get_totals()
+    response_data = {
+        'daily_total': str(totals['daily_total']),
+        'weekly_total': str(totals['weekly_total']),
+        'monthly_total': str(totals['monthly_total']),
+    }
+    return JsonResponse(response_data)

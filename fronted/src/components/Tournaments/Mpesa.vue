@@ -1,6 +1,10 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="relative p-4 w-full max-w-md max-h-full">
+  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
+    <!-- Overlay with reduced opacity -->
+    <div class="absolute inset-0 bg-gray-800 bg-opacity-10"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700 z-10">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Lipa Na Mpesa</h3>
@@ -28,6 +32,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script setup>
 import { ref } from 'vue';
