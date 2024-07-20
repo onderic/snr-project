@@ -32,8 +32,8 @@
         </div>
         <div class="mt-10 rounded-lg shadow-md p-6">
           <h1 class="mb-10 text-3xl font-serif dark:text-white">Revenue Overview</h1>
-          <div class="relative">
-           <ChartComponent/>
+          <div class="">
+            <ChartComponent/>
           </div>
         </div>
       </div>
@@ -43,11 +43,7 @@
   <script setup>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
-  import { Bar } from 'vue-chartjs';
-  import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
-  import ChartComponent from '@/components/ChartComponent.vue'
-  
-  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+  import ChartComponent from '@/components/ChartComponent.vue';
   
   const totals = ref({
     daily: 0,
@@ -55,65 +51,11 @@
     monthly: 0
   });
   
-  const chartData = ref({
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    datasets: [
-      {
-        label: 'Daily Revenue',
-        data: [], // Revenue amounts should be here
-        backgroundColor: '#4A90E2',
-        borderColor: '#2C3E50',
-        borderWidth: 1
-      }
-    ]
-  });
-  
-  const chartOptions = ref({
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: {
-          color: 'gray'
-        }
-      }
-    },
-    scales: {
-      x: {
-        type: 'category',
-        title: {
-          display: true,
-          text: 'Days'
-        },
-        ticks: {
-          color: 'gray'
-        },
-        grid: {
-          color: 'rgba(128, 128, 128, 0.2)'
-        }
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Revenue'
-        },
-        ticks: {
-          color: 'gray'
-        },
-        grid: {
-          color: 'rgba(128, 128, 128, 0.2)'
-        }
-      }
-    }
-  });
   
   onMounted(async () => {
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    updateChartColors(darkModeMediaQuery.matches);
-    darkModeMediaQuery.addEventListener('change', e => updateChartColors(e.matches));
-  
     try {
-      const response = await axios.get('/revenue-overview/');
+      // Fetch revenue totals
+      const response = await axios.get('revenue-overview/');
       const data = response.data;
   
       totals.value = {
@@ -121,27 +63,28 @@
         weekly: parseFloat(data.weekly_fee),
         monthly: parseFloat(data.monthly_fee)
       };
-  
-      // Manual days mapping
-      const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
-      const dailyFees = data.daily_fees;
-      const revenues = days.map(day => parseFloat(dailyFees[day]) || 0);
-  
-      chartData.value.labels = days;
-      chartData.value.datasets[0].data = revenues;
-  
-      console.log('Chart Data:', chartData.value); // Debugging line to check chart data
+
     } catch (error) {
-      console.error('Error fetching revenue data:', error);
+      console.error('Error fetching data:', error);
     }
   });
-  
-  function updateChartColors(isDarkMode) {
-    chartOptions.value.plugins.legend.labels.color = isDarkMode ? 'gray' : 'black';
-    chartOptions.value.scales.x.ticks.color = isDarkMode ? 'gray' : 'black';
-    chartOptions.value.scales.y.ticks.color = isDarkMode ? 'gray' : 'black';
-    chartOptions.value.scales.x.grid.color = isDarkMode ? 'rgba(128, 128, 128, 0.2)' : '#ddd';
-    chartOptions.value.scales.y.grid.color = isDarkMode ? 'rgba(128, 128, 128, 0.2)' : '#ddd';
-  }
   </script>
+  
+  <style scoped>
+  .relative {
+    width: 100%;
+    height: 100%; /* Make sure the container takes the full available height */
+  }
+  
+  canvas {
+    width: 100% !important; /* Make sure the canvas scales with the container */
+    height: auto !important; /* Maintain aspect ratio */
+  }
+  
+  @media (min-width: 1024px) {
+    .relative {
+      height: 500px;
+    }
+  }
+  </style>
   

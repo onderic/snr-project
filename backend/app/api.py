@@ -14,6 +14,7 @@ from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from rest_framework.response import Response
+from django.utils import timezone
 
 
 @api_view(['GET'])
@@ -348,75 +349,59 @@ def mpesa_callback(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
  
- 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def revenue_overview(request):
-    """
-    Fetch the total enrollment fees for daily, weekly (last 7 days), monthly periods,
-    and daily revenue for the past 5 weekdays (Monday to Friday) where `paid` is True.
-    """
-    # Get date from query parameters or use current date
-    date = request.query_params.get('date')
-    if date:
-        try:
-            date = datetime.strptime(date, '%Y-%m-%d').date()
-        except ValueError:
-            return Response({'error': 'Invalid date format. Use YYYY-MM-DD.'}, status=400)
-    else:
-        date = now().date()
 
-    # Define time periods
-    start_of_today = datetime.combine(date, datetime.min.time())
-    end_of_today = start_of_today + timedelta(days=1)
+def daily_revenue_graph(request):
+    # Aggregate the total enrollment fees by day
+    data = Enrollment.objects.filter(paid=True) \
+        .select_related('tournament') \
+        .values('enrolled_at') \
+        .annotate(total_revenue=Sum('tournament__enrollment_fee')) \
+        .order_by('enrolled_at')
 
-    start_of_week = date - timedelta(days=date.weekday())
-    end_of_week = start_of_week + timedelta(weeks=1)
+    # Debugging: Print raw data
+    print("Aggregated Data:", list(data))
 
-    start_of_month = date.replace(day=1)
-    next_month = start_of_month.replace(day=28) + timedelta(days=4)  # move to the next month
-    end_of_month = next_month - timedelta(days=next_month.day)
-
-    start_of_week_range = date - timedelta(days=date.weekday())
-    end_of_week_range = start_of_week_range + timedelta(days=5)  # Friday of the current week
-
-    def get_total_fee(start_date, end_date):
-        enrollments = Enrollment.objects.filter(
-            paid=True,
-            enrolled_at__range=(start_date, end_date)
-        ).select_related('tournament')
-        total_fee = enrollments.aggregate(
-            total_fee=Sum(
-                ExpressionWrapper(
-                    F('tournament__enrollment_fee'),
-                    output_field=DecimalField()
-                )
-            )
-        )['total_fee'] or 0
-        return total_fee
-
-    def get_daily_fees(start_date, end_date):
-        daily_fees = []
-        current_date = start_date
-        while current_date < end_date:
-            next_date = current_date + timedelta(days=1)
-            total_fee = get_total_fee(current_date, next_date)
-            daily_fees.append(str(total_fee))
-            current_date = next_date
-        return daily_fees
-
-    # Calculate total fees for different periods
-    daily_fee = get_total_fee(start_of_today, end_of_today)
-    weekly_fee = get_total_fee(start_of_week, end_of_today)
-    monthly_fee = get_total_fee(start_of_month, end_of_today)
-    daily_fees = get_daily_fees(start_of_week_range, end_of_week_range)
-    
-    # Prepare response data
-    response_data = {
-        'daily_fee': str(daily_fee),
-        'weekly_fee': str(weekly_fee),
-        'monthly_fee': str(monthly_fee),
-        'daily_fees': daily_fees
+    # Define the order of days of the week
+    day_order = {
+        'Monday': 0,
+        'Tuesday': 1,
+        'Wednesday': 2,
+        'Thursday': 3,
+        'Friday': 4,
+        'Saturday': 5,
+        'Sunday': 6
     }
-    
-    return Response(response_data)
+
+    # Initialize lists to hold labels and data
+    labels = []
+    revenue_data = []
+
+    # Extract and format the data
+    day_revenue = {}
+    for entry in data:
+        enrolled_at = entry['enrolled_at']
+        if enrolled_at:
+            # Extract the day name from the date
+            day_name = datetime.strptime(enrolled_at.strftime('%Y-%m-%d'), '%Y-%m-%d').strftime('%A')
+            if day_name not in day_revenue:
+                day_revenue[day_name] = 0.0
+            day_revenue[day_name] += float(entry['total_revenue']) if entry['total_revenue'] is not None else 0.0
+
+    # Sort days based on the defined order
+    sorted_days = sorted(day_revenue.keys(), key=lambda day: day_order[day])
+
+    # Populate the labels and data lists
+    for day in sorted_days:
+        labels.append(day)
+        revenue_data.append(day_revenue[day])
+
+    result = {
+        'labels': labels,
+        'data': revenue_data
+    }
+
+    return JsonResponse(result)
+
+def revenue_overview(request):
+
+    return

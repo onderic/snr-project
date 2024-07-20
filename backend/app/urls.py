@@ -27,4 +27,5 @@ urlpatterns = [
     path('mpesa-callback/', api.mpesa_callback, name='mpesa-callback'),
 
     path('revenue-overview/', api.revenue_overview, name='revenue_overview'),
+    path('revenue-overview-graph/', api.daily_revenue_graph, name='revenue_overview'),
 ]
