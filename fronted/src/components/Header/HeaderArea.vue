@@ -14,14 +14,17 @@
             >
             <v-icon name="co-home" />
             </button>
-            <div id="logo">
-              <a href="feed.html">
-                <img src="" alt="logohere" class="w-28 md:block hidden dark:!hidden" />
-                <img src="" alt="logohere" class="dark:md:block hidden" />
-                <img src="" class="hidden max-md:block w-20 dark:!hidden" alt="logohere" />
-                <img src="" class="hidden dark:max-md:block w-20" alt="logohere" />
-              </a>
+            <div class="min-w-max inline-flex relative">
+                <a href="/" class="relative flex items-center gap-3">
+                    <div class="relative w-7 h-7 overflow-hidden flex rounded-xl">
+                      <img src="@/assets/ball.jpeg" alt="">
+                    </div>
+                    <div class="inline-flex text-lg font-semibold text-gray-900">
+                        CueScore
+                    </div>
+                </a>
             </div>
+
           </div>
         </div>
         <div class="flex-1 relative">

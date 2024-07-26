@@ -1,101 +1,159 @@
 <template>
     <div >
-    
-    
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-6">
-      <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="@/assets/ball.jpeg" class="h-8" alt="" />
-          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">RoyalPrinceLtd</span>
-      </a>
-      <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-        <div>
-            <button
-            @click="toggleDarkMode"
-            class="sm:p-2 p-1 rounded-full relative sm:bg-gray-100 dark:bg-slate-900 dark:text-white"
-          >
-            <template v-if="!isDark">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3.25a8.75 8.75 0 0 1 8.75 8.75 8.75 8.75 0 0 1-8.75 8.75 8.75 8.75 0 0 1-8.75-8.75 8.75 8.75 0 0 1 8.75-8.75zm0-2.5a11.25 11.25 0 0 0-11.25 11.25 11.25 11.25 0 0 0 11.25 11.25 11.25 11.25 0 0 0 11.25-11.25 11.25 11.25 0 0 0-11.25-11.25z"></path>
-              </svg>
-            </template>
-            <template v-else>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 3.25a8.75 8.75 0 0 1 8.75 8.75 8.75 8.75 0 0 1-8.75 8.75 8.75 8.75 0 0 1-8.75-8.75 8.75 8.75 0 0 1 8.75-8.75zm0-2.5a11.25 11.25 0 0 0-11.25 11.25 11.25 11.25 0 0 0 11.25 11.25 11.25 11.25 0 0 0 11.25-11.25 11.25 11.25 0 0 0-11.25-11.25z"></path>
-                <path d="M12 5.75a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0-2.5a8.75 8.75 0 0 0-8.75 8.75 8.75 8.75 0 0 0 8.75 8.75 8.75 8.75 0 0 0 8.75-8.75 8.75 8.75 0 0 0-8.75-8.75z"></path>
-              </svg>
-            </template>
-            <span class="sr-only">Switch to light / dark version</span>
+
+
+    <header class="absolute inset-x-0 top-0 z-50 py-6">
+    <div class="mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5">
+        <nav class="w-full flex justify-between gap-6 relative">
+            <!-- logo -->
+            <div class="min-w-max inline-flex relative">
+                <a href="/" class="relative flex items-center gap-3">
+                    <div class="relative w-7 h-7 overflow-hidden flex rounded-xl">
+                      <img src="@/assets/ball.jpeg" alt="">
+                    </div>
+                    <div class="inline-flex text-lg font-semibold text-gray-900">
+                        CueScore
+                    </div>
+                </a>
+            </div>
+
+            <div data-nav-overlay aria-hidden="true"
+                class="fixed hidden inset-0 lg:!hidden bg-gray-800/60 bg-opacity-50 backdrop-filter backdrop-blur-xl">
+            </div>
+            <div data-navbar
+                class="flex invisible opacity-0  translate-y-10 overflow-hidden lg:visible lg:opacity-100  lg:-translate-y-0 lg:scale-y-100 duration-300 ease-linear flex-col gap-y-6 gap-x-4 lg:flex-row w-full lg:justify-between lg:items-center absolute lg:relative top-full lg:top-0 bg-white lg:!bg-transparent border-x border-x-gray-100 lg:border-x-0">
+                <ul
+                    class="border-t border-gray-100  lg:border-t-0 px-6 lg:px-0 pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-3 text-lg text-gray-700 w-full lg:justify-center lg:items-center">
+                    <li>
+                        <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
+                            Services
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
+                            About us
+                        </a>
+                    </li>
+                    <li>
+                      <div>
+                  <button
+                  @click="toggleDarkMode"
+                  class="sm:p-2 p-1 rounded-full relative sm:bg-gray-100 dark:bg-slate-900 dark:text-white"
+                >
+                  <template v-if="!isDark">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 3.25a8.75 8.75 0 0 1 8.75 8.75 8.75 8.75 0 0 1-8.75 8.75 8.75 8.75 0 0 1-8.75-8.75 8.75 8.75 0 0 1 8.75-8.75zm0-2.5a11.25 11.25 0 0 0-11.25 11.25 11.25 11.25 0 0 0 11.25 11.25 11.25 11.25 0 0 0 11.25-11.25 11.25 11.25 0 0 0-11.25-11.25z"></path>
+                    </svg>
+                  </template>
+                  <template v-else>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 3.25a8.75 8.75 0 0 1 8.75 8.75 8.75 8.75 0 0 1-8.75 8.75 8.75 8.75 0 0 1-8.75-8.75 8.75 8.75 0 0 1 8.75-8.75zm0-2.5a11.25 11.25 0 0 0-11.25 11.25 11.25 11.25 0 0 0 11.25 11.25 11.25 11.25 0 0 0 11.25-11.25 11.25 11.25 0 0 0-11.25-11.25z"></path>
+                      <path d="M12 5.75a6.25 6.25 0 1 1 0 12.5 6.25 6.25 0 0 1 0-12.5zm0-2.5a8.75 8.75 0 0 0-8.75 8.75 8.75 8.75 0 0 0 8.75 8.75 8.75 8.75 0 0 0 8.75-8.75 8.75 8.75 0 0 0-8.75-8.75z"></path>
+                    </svg>
+                  </template>
+                  <span class="sr-only">Switch to light / dark version</span>
           </button>
   
                 
             </div>
-          <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
-      
-          <button data-collapse-toggle="navbar-cta" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false">
-            <span class="sr-only">Open main menu</span>
-            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-            </svg>
-        </button>
-      </div>
-      <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
-        <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-          <li>
-            <a href="#" class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500" aria-current="page">Home</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Find Jobs</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-          </li>
-        </ul>
-      </div>
-      </div>
-    </nav>
-    
-    
-    
-    
-    <div class="relative overflow-hidden dark:bg-darker lg:overflow-auto">
-        <div class="absolute inset-x-0 top-20 lg:hidden ">
-            <div aria-hidden="true" class="grid grid-cols-2 -space-x-52 opacity-50 dark:opacity-60 2xl:mx-auto 2xl:max-w-6xl">
-                <div class="h-60 bg-gradient-to-br from-primary to-purple-400 blur-3xl dark:from-blue-700"></div>
-                <div class="h-72 rounded-full bg-gradient-to-r from-cyan-400 to-sky-300 blur-3xl dark:from-transparent dark:to-indigo-600"></div>
-            </div>
-        </div>
-        
-        <div class="mx-auto max-w-7xl px-8 md:px-12 lg:px-6 xl:px-0 mb-20">
-            <div class="relative ml-auto pt-20 xl:pt-20">
-                <div class="gap-12 md:flex md:items-center">
-                    <div class="text-center md:text-left lg:w-1/2">
-                        <h1 class="text-5xl font-black dark:text-white md:text-6xl xl:text-7xl capitalize font-serif ">Discover your dream job with RoyalPrinceLtd</h1>
-                        <!-- <h1 class="text-5xl font-black text-blue-500 md:text-6xl xl:text-7xl"></h1> -->
-                        <div class="text-lg text-gray-600 dark:text-gray-300 mb-8 mt-5 ">
-                            <p>Explore top career opportunities across various industries. Find your perfect role and advance your career with us.</p>
-                        </div>
-                        
-                      <div>
-                        <button>C</button>
-                      </div>
-                      
-                    </div>
-                    <div class="relative mt-12  md:mt-0 md:w-2/5 lg:w-1/2 ml-12">
-                        <div class="overflow-hidden">
-                            <img class="w-full h-full object-cover object-center dark:hidden" src="@/assets/event.png" alt="app screenshot" width="1628" height="1233">
-                            <img class="hidden w-full h-full object-cover object-center dark:block" src="@/assets/event.png" alt="app screenshot" width="1628" height="1233">
-                        </div>
-                    </div>
+                    </li>
+                </ul>
+
+                <div
+                    class="lg:min-w-max flex items-center sm:w-max w-full pb-6 lg:pb-0 border-b border-gray-100   lg:border-0 px-6 lg:px-0">
+                    <router-link to="/dashboard"
+                        class="flex justify-center items-center w-full sm:w-max px-6 h-12 rounded-full outline-none relative overflow-hidden border duration-300 ease-linear
+                    after:absolute after:inset-x-0 after:aspect-square after:scale-0 after:opacity-70 after:origin-center after:duration-300 after:ease-linear after:rounded-full after:top-0 after:left-0 after:bg-[#172554] hover:after:opacity-100 hover:after:scale-[2.5] bg-blue-600 border-transparent hover:border-[#172554]">
+                        <span class="relative z-10 text-white">
+                            Get Started
+                        </span>
+                 
+                  </router-link>
                 </div>
             </div>
-    
-    
+
+
+            <div class="min-w-max flex items-center gap-x-3">
+
+                <button data-toggle-navbar data-is-open="false"
+                    class="lg:hidden lg:invisible outline-none w-7 h-auto flex flex-col relative">
+                    <span id="line-1"
+                        class="w-6 h-0.5 rounded-full bg-gray-700 transition-all duration-300 ease-linear"></span>
+                    <span id="line-2"
+                        class="w-6 origin-center  mt-1 h-0.5 rounded-ful bg-gray-700 transition-all duration-300 ease-linear"></span>
+                    <span id="line-3"
+                        class="w-6 mt-1 h-0.5 rounded-ful bg-gray-700 transition-all duration-300 ease-linear"></span>
+                    <span class="sr-only">togglenav</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- hero section -->
+<section class="relative py-32 lg:py-36 bg-white dark:bg-gray-900">
+    <div
+        class="mx-auto lg:max-w-7xl w-full px-5 sm:px-10 md:px-12 lg:px-5 flex flex-col lg:flex-row gap-10 lg:gap-12">
+        <div class="absolute w-full lg:w-1/2 inset-y-0 lg:right-0 hidden lg:block">
+            <span
+                class="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-green-400 blur-xl opacity-60 lg:opacity-95 lg:block hidden dark:bg-green-600 dark:opacity-70"></span>
+            <span class="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-blue-600 blur-xl opacity-80 dark:bg-blue-700 dark:opacity-90"></span>
         </div>
-        
+        <span
+            class="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-blue-600 to-green-400 absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90 dark:from-blue-700 dark:to-green-700 dark:opacity-50"></span>
+        <div class="relative flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8 
+            lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2">
+            <h1 class="text-3xl leading-tight sm:text-4xl md:text-5xl xl:text-6xl
+                font-bold text-gray-900 dark:text-gray-100">
+                Discover and Connect with <span
+                    class="text-transparent bg-clip-text bg-gradient-to-br from-indigo-600 from-20% via-blue-600 via-30% to-green-600 dark:from-indigo-400 dark:via-blue-400 dark:to-green-400">Local Pool
+                    Centers</span> and Tournaments.
+            </h1>
+            <p class="mt-8 text-gray-700 dark:text-gray-300">
+                Find pool centers near you, join exciting tournaments, and connect with fellow players. 
+                For owners, easily upload your pool center details and organize tournaments to reach more players.
+            </p>
+            <div class="mt-10 w-full flex max-w-md mx-auto lg:mx-0">
+                <div class="flex sm:flex-row flex-col gap-5 w-full">
+                    <router-link to="/dashboard">
+                        <button class="flex text-white justify-center items-center w-max min-w-max sm:w-max px-6 h-12 rounded-full outline-none relative overflow-hidden border duration-300 ease-linear
+                                        after:absolute after:inset-x-0 after:aspect-square after:scale-0 after:opacity-70 after:origin-center after:duration-300 after:ease-linear after:rounded-full after:top-0 after:left-0 after:bg-[#172554] hover:after:opacity-100 hover:after:scale-[2.5] bg-blue-600 border-transparent hover:border-[#172554] dark:bg-blue-700 dark:hover:bg-blue-800 dark:after:bg-[#1a1a1a]">
+                            <span class="hidden sm:flex relative z-[5]">
+                                Discover Now
+                            </span>
+                        </button>
+                    </router-link>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-1 lg:w-1/2 lg:h-auto relative lg:max-w-none lg:mx-0 mx-auto max-w-3xl">
+            <img src="@/assets/p.jpg" alt="Hero image" width="2350" height="2359"
+                class="lg:absolute lg:w-full lg:h-full rounded-3xl object-cover lg:max-h-none max-h-96">
+        </div>
+    </div>
+</section>
+
+
+    <div class="relative overflow-hidden dark:bg-darker lg:overflow-auto">
+      <header
+       
+      >
+
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative flex items-center justify-center h-full text-center text-white p-6">
+            <div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">Welcome to Our Service</h1>
+                <p class="text-lg mb-8">Discover what we can do for you.</p>
+                <a href="#discover" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">Discover</a>
+            </div>
+        </div>
+    </header>
     </div>
   
   
@@ -378,5 +436,7 @@
     
   
   <style scoped>
-    
+     .bg-cover {
+            background-size: cover;
+        }
   </style>  
