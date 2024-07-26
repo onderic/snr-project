@@ -292,6 +292,26 @@ def pay_enrollment_fee(request, id):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_transaction_status(request, checkout_request_id):
+    try:
+        transaction = MpesaTransaction.objects.get(checkout_request_id=checkout_request_id)
+        
+        # Return data based on result_code
+        return JsonResponse({
+            'ResultCode': str(transaction.result_code) if transaction.result_code is not None else '',
+            'ResultDesc': transaction.result_description if transaction.result_description is not None else ''
+        })
+    
+    except MpesaTransaction.DoesNotExist:
+        return JsonResponse({
+            'ResultCode': '',
+            'ResultDesc': ''
+        })
+    
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def mpesa_callback(request):

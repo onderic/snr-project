@@ -27,19 +27,29 @@
               <span v-else>Lipa Na Mpesa</span>
             </button>
           </form>
+          <!-- Animated message while polling -->
+          <div v-if="isPolling" class="mt-4 text-center">
+            <LoadingAnimation message="We are waiting for the transaction to be confirmed. Please do not close this window." />
+          </div>
+          <!-- Display the result of the transaction -->
+          <div v-if="transactionResult" class="mt-4 text-center">
+            <p :class="{'text-green-500': transactionResult.resultCode === '0', 'text-red-500': transactionResult.resultCode !== '0'}">
+              {{ transactionResult.resultDesc || 'Processing transaction...' }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
-
 <script setup>
-import { ref } from 'vue';
-import { useUserStore } from '@/stores/user';
+import { ref, watch } from 'vue';
 import axios from 'axios';
+import usePolling from '@/composables/usePolling';
 import { useToast } from 'vue-toastify';
+import { useUserStore } from '@/stores/user';
+import LoadingAnimation from '@/components/Tournaments/LoadingAnimation.vue';
 
 const props = defineProps({
   isOpen: {
@@ -58,7 +68,9 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 const phoneNumber = ref('');
-
+const checkoutRequestId = ref('');
+const isPolling = ref(false);
+const transactionResult = ref(null);
 const toast = useToast();
 const userStore = useUserStore();
 const loading = ref(false);
@@ -80,7 +92,9 @@ const submitPhoneNumber = async () => {
       },
     });
     if (response.status === 200) {
-      toast.success('An stk push has been sent to your phone');
+      const responseDescription = response.data.ResponseDescription || 'An STK push has been sent to your phone';
+      toast.success(responseDescription);
+      checkoutRequestId.value = response.data.CheckoutRequestID;
       closeModal();
     } else {
       toast.error(response.data?.error || 'Something went wrong, try later');
@@ -91,4 +105,45 @@ const submitPhoneNumber = async () => {
     loading.value = false;
   }
 };
+
+const checkTransactionStatus = async () => {
+  try {
+    const response = await axios.get(`check-transaction-status/${checkoutRequestId.value}/`, {
+      headers: {
+        Authorization: `Bearer ${userStore.user.access}`,
+      },
+    });
+    const resultCode = response.data?.ResultCode;
+    const resultDesc = response.data?.ResultDesc;
+
+    transactionResult.value = { resultCode, resultDesc };
+
+    if (resultCode === '0') {
+      toast.success(resultDesc || 'Transaction completed successfully');
+      isPolling.value = false;
+      checkoutRequestId.value = ''; 
+    } else if (!resultCode && !resultDesc) {
+      console.log('Transaction status not available yet, retrying...');
+    } else {
+      toast.error(`Transaction failed: ${resultDesc || 'Unknown error'}`);
+      isPolling.value = false;
+      checkoutRequestId.value = ''; 
+    }
+  } catch (error) {
+    console.error('Polling error:', error);
+    isPolling.value = false;
+  }
+};
+
+const { start, clear } = usePolling(checkTransactionStatus, 1000);
+
+watch(checkoutRequestId, (newValue) => {
+  if (newValue) {
+    isPolling.value = true;
+    start();
+  } else {
+    clear();
+    isPolling.value = false;
+  }
+});
 </script>
