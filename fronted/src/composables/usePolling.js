@@ -1,50 +1,35 @@
-import { ref, onMounted, onUnmounted } from 'vue';
+// usePolling.js
+import { ref, onUnmounted } from 'vue';
 
-const usePolling = (method, timeInterval = 10000) => {
-  const interval = ref(null);
+export default function usePolling(callback, interval, onLoadingChange) {
   const isPolling = ref(false);
-
-  const clear = () => {
-    if (interval.value !== null) {
-      clearInterval(interval.value);
-      interval.value = null;
-      isPolling.value = false;
-    }
-  };
-
-  const fetchData = () => {
-    method();
-    if (isPolling.value) {
-      // Start interval
-      interval.value = setInterval(() => {
-        method();
-      }, timeInterval);
-    }
-  };
+  const isLoading = ref(false);
+  let timerId = null;
 
   const start = () => {
-    // Clear any existing polling calls
-    clear();
-    // Set polling flag to true
+    if (isPolling.value) return;
     isPolling.value = true;
-    // Fetch data
-    fetchData();
+    isLoading.value = true;
+    onLoadingChange(isLoading.value);
+    timerId = setInterval(() => {
+      if (isPolling.value) callback();
+    }, interval);
   };
 
-  onMounted(() => {
-    if (isPolling.value) {
-      fetchData();
+  const stop = () => {
+    if (!isPolling.value) return;
+    isPolling.value = false;
+    isLoading.value = false;
+    onLoadingChange(isLoading.value);
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
     }
-  });
+  };
 
   onUnmounted(() => {
-    clear();
+    stop();
   });
 
-  return {
-    start,
-    clear,
-  };
-};
-
-export default usePolling;
+  return { start, stop, isLoading };
+}

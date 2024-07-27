@@ -1,34 +1,79 @@
 <template>
-    <div class="flex flex-col items-center">
-      <div class="relative w-16 h-16">
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="w-8 h-8 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
-        </div>
+  <div class="fixed inset-0 flex items-center justify-center bg-gray-400 dark:bg-gray-800 z-10">
+    <div class="flex flex-col items-center justify-center w-full h-full px-4 py-8">
+      <div class="flex items-center justify-center ">
+        <p class="text-white dark:text-gray-200 text-lg mb-28 font-semibold font-serif ">
+        {{ message }}
+      </p> 
       </div>
-      <p class="mt-4 text-sm font-medium text-gray-900 dark:text-white">{{ message }}</p>
+      <div class="relative mb-4">
+        <span class="loader"></span>
+      </div>
+      
     </div>
-  </template>
-  
-  <script setup>
-  import { defineProps } from 'vue';
-  
-  const props = defineProps({
-    message: {
-      type: String,
-      default: 'Processing...'
-    }
-  });
-  </script>
-  
-  <style scoped>
-  /* Spinner animation */
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  message: {
+    type: String,
+    default: 'Loading, please wait...'
   }
-  
-  .animate-spin {
-    animation: spin 1s linear infinite;
+});
+</script>
+
+<style scoped>
+.loader {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+.loader::before , .loader::after{
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50% , -50%);
+  width: 48em;
+  height: 48em;
+  background-image:
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0),
+    radial-gradient(circle 10px, #FFF 100%, transparent 0);
+  background-position: 0em -18em, 0em 18em, 18em 0em, -18em 0em,
+                       13em -13em, -13em -13em, 13em 13em, -13em 13em;
+  background-repeat: no-repeat;
+  font-size: 0.5px;
+  border-radius: 50%;
+  animation: blast 1s ease-in infinite;
+}
+.loader::after {
+  font-size: 1px;
+  background: #fff;
+  animation: bounce 1s ease-in infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { font-size: 0.75px }
+  50% { font-size: 1.5px }
+}
+@keyframes blast {
+  0%, 40% {
+    font-size: 0.5px;
   }
-  </style>
-  
+  70% {
+    opacity: 1;
+    font-size: 4px;
+  }
+  100% {
+    font-size: 6px;
+    opacity: 0;
+  }
+}
+</style>

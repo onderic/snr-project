@@ -93,3 +93,5 @@ class MpesaTransaction(models.Model):
 
     def __str__(self):
         return f"M-Pesa Transaction - {self.checkout_request_id}"
+
+

@@ -1,26 +1,25 @@
+from datetime import datetime
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .forms import PoolForm
 from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer
 from .models import Enrollment, MpesaTransaction, PoolSpace,Tournament
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from geopy.distance import geodesic
 from accounts.models import User
 from .mpesa import LipaNaMpesa
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
-from datetime import datetime, timedelta
+from django.db.models import Sum
 from django.utils.timezone import now
 from rest_framework.response import Response
 from .utils import get_totals  
+from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
-    # time.sleep(2)
     user_lat = request.query_params.get('latitude')
     user_lng = request.query_params.get('longitude')
 
@@ -61,7 +60,6 @@ def get_user_pool_spaces(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_pool_spaces(request):
-    # time.sleep(2)
     pool_spaces = PoolSpace.objects.all()
     serializer = PoolSpaceSerializer(pool_spaces, many=True)
     return Response(serializer.data)
@@ -93,7 +91,6 @@ def retrieve_pool_space(request, pk):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_pool_space(request, pk):
-    # time.sleep(2)
     try:
         pool_space = PoolSpace.objects.get(pk=pk)
     except PoolSpace.DoesNotExist:
@@ -101,7 +98,7 @@ def update_pool_space(request, pk):
     
     if request.method == 'PUT':
         serializer = PoolSpaceSerializer(pool_space, data=request.data)
-    else:  # PATCH request
+    else:
         serializer = PoolSpaceSerializer(pool_space, data=request.data, partial=True)
     
     if serializer.is_valid():
@@ -115,7 +112,6 @@ def update_pool_space(request, pk):
 @authentication_classes([])
 @permission_classes([])
 def create_pool_space(request):
-    # time.sleep(1)
     serializer = PoolSpaceSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -129,7 +125,6 @@ def create_pool_space(request):
 @permission_classes([])
 def create_tournament(request):
     try:
-        # Extract data from request payload
         title = request.data.get('title')
         description = request.data.get('description', '')
         start_time = request.data.get('start_time')
@@ -137,7 +132,6 @@ def create_tournament(request):
         enrollment_fee = request.data.get('enrollment_fee')
         organizer_id = request.data.get('organizer')
 
-        # Validate organizer exists
         organizer = get_object_or_404(User, id=organizer_id)
     
         pool_space = get_object_or_404(PoolSpace, user=organizer)
@@ -197,18 +191,16 @@ def delete_tournament(request, pk):
 @authentication_classes([])
 @permission_classes([])
 def owner_event(request,user_id):
-    # time.sleep(2)
     user = User.objects.get(pk=user_id)
     events = Tournament.objects.filter(organizer=user).order_by('-created_at')
     serializer = TournamentSerializer(events, many=True)
 
     return Response(serializer.data)
 
-# puplic
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def events(request):
-    # time.sleep(2)
     events = Tournament.objects.all().order_by('-created_at')[:10]
     serializer = TournamentSerializer(events, many=True)
     return Response(serializer.data)
@@ -216,8 +208,7 @@ def events(request):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_one_event(request, event_id):
-    # time.sleep(2)  # Delay for testing purposes
+def get_one_event(request, event_id): 
     try:
         event = Tournament.objects.select_related('pool_space').get(id=event_id)
     except Tournament.DoesNotExist:
@@ -230,7 +221,6 @@ def get_one_event(request, event_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def enroll_event(request):
-    # time.sleep(1)
     serializer = EnrollmentWriteSerializer(data=request.data)
     
     if serializer.is_valid():
@@ -250,7 +240,6 @@ def enroll_event(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_enrollments(request):
-    # time.sleep(2)
     user = request.user
     enrollments = Enrollment.objects.filter(user=user)
     serializer = EnrollmentReadSerializer(enrollments, many=True)
@@ -262,21 +251,23 @@ def user_enrollments(request):
 def pay_enrollment_fee(request, id):
     try:
         enrollment = Enrollment.objects.get(id=id, user=request.user)
-        # enrollment = Enrollment.objects.get(id=id, user=request.user, paid=False)
     except Enrollment.DoesNotExist:
         return Response({'error': 'Enrollment not found or already paid'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        return Response({'error': 'An unexpected error occurred: ' + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     phone_number = request.data.get('phone_number')
     amount = request.data.get('amount')
 
     if not phone_number or not amount:
         return Response({'error': 'Phone number and amount are required'}, status=status.HTTP_400_BAD_REQUEST)
     
+    if len(phone_number) != 10 or not (phone_number.startswith('01') or phone_number.startswith('07')):
+        return Response({'error': 'Invalid Phone Number'}, status=status.HTTP_400_BAD_REQUEST)
+
     if phone_number.startswith('0'):
         phone_number = '254' + phone_number[1:]
-    
+
     payload = {
         'enrollment_id': id,
         'phone_number': phone_number,
@@ -284,21 +275,19 @@ def pay_enrollment_fee(request, id):
     }
 
     mpesa = LipaNaMpesa()
-
     try:
         response = mpesa.stk_push(payload)
-        return Response(response, status=status.HTTP_200_OK)
+        return JsonResponse(response, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        return JsonResponse({'error': 'An unexpected error occurred: ' + str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def check_transaction_status(request, checkout_request_id):
     try:
         transaction = MpesaTransaction.objects.get(checkout_request_id=checkout_request_id)
         
-        # Return data based on result_code
         return JsonResponse({
             'ResultCode': str(transaction.result_code) if transaction.result_code is not None else '',
             'ResultDesc': transaction.result_description if transaction.result_description is not None else ''
@@ -309,7 +298,8 @@ def check_transaction_status(request, checkout_request_id):
             'ResultCode': '',
             'ResultDesc': ''
         })
-    
+    except:
+        pass
 
 
 @api_view(['POST'])
@@ -353,8 +343,6 @@ def mpesa_callback(request):
                     transaction.transaction_date = item.get('Value')
                 elif item.get('Name') == 'PhoneNumber':
                     transaction.phone_number = item.get('Value')
-            
-            # Update the corresponding Enrollment object
             enrollment = get_object_or_404(Enrollment, id=transaction.enrollment.id)
             enrollment.paid = True
             enrollment.save()
@@ -387,7 +375,6 @@ def daily_revenue_graph(request):
         'Sunday': 6
     }
 
-    # Initialize lists to hold labels and data
     labels = []
     revenue_data = []
 
@@ -396,16 +383,12 @@ def daily_revenue_graph(request):
     for entry in data:
         enrolled_at = entry['enrolled_at']
         if enrolled_at:
-            # Extract the day name from the date
             day_name = datetime.strptime(enrolled_at.strftime('%Y-%m-%d'), '%Y-%m-%d').strftime('%A')
             if day_name not in day_revenue:
                 day_revenue[day_name] = 0.0
             day_revenue[day_name] += float(entry['total_revenue']) if entry['total_revenue'] is not None else 0.0
-
-    # Sort days based on the defined order
     sorted_days = sorted(day_revenue.keys(), key=lambda day: day_order[day])
 
-    # Populate the labels and data lists
     for day in sorted_days:
         labels.append(day)
         revenue_data.append(day_revenue[day])

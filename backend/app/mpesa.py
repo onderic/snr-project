@@ -22,6 +22,7 @@ class LipaNaMpesa:
         self.access_token = None
         self.call_back = os.getenv("CALLBACK_URL")
         self.access_token_expiration = 0
+        self.headers = None  
 
         try:
             self.access_token = self.get_mpesa_access_token()
@@ -30,6 +31,7 @@ class LipaNaMpesa:
             else:
                 self.access_token_expiration = time.time()
         except Exception as e:
+            user_message = "Something went wrong. Please try again later."
             print(str(e))
     
     def get_mpesa_access_token(self):

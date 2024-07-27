@@ -1,9 +1,8 @@
+
 <template>
-  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
-    <!-- Overlay with reduced opacity -->
+  <div>
+    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
     <div class="absolute inset-0 bg-gray-800 bg-opacity-10"></div>
-    
-    <!-- Modal Content -->
     <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700 z-10">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -27,19 +26,12 @@
               <span v-else>Lipa Na Mpesa</span>
             </button>
           </form>
-          <!-- Animated message while polling -->
-          <div v-if="isPolling" class="mt-4 text-center">
-            <LoadingAnimation message="We are waiting for the transaction to be confirmed. Please do not close this window." />
-          </div>
-          <!-- Display the result of the transaction -->
-          <div v-if="transactionResult" class="mt-4 text-center">
-            <p :class="{'text-green-500': transactionResult.resultCode === '0', 'text-red-500': transactionResult.resultCode !== '0'}">
-              {{ transactionResult.resultDesc || 'Processing transaction...' }}
-            </p>
-          </div>
         </div>
       </div>
     </div>
+    
+  </div>
+  <Loading v-if="isLoading" message="We are waiting for you. Please do not close this window."  />
   </div>
 </template>
 
@@ -49,34 +41,26 @@ import axios from 'axios';
 import usePolling from '@/composables/usePolling';
 import { useToast } from 'vue-toastify';
 import { useUserStore } from '@/stores/user';
-import LoadingAnimation from '@/components/Tournaments/LoadingAnimation.vue';
+import Loading from '@/components/Tournaments/LoadingAnimation.vue';
 
 const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true
-  },
-  amount: {
-    type: Number,
-    required: true
-  },
-  eventId: {
-    type: Number,
-    required: true
-  }
+  isOpen: Boolean,
+  amount: Number,
+  eventId: Number,
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['polling-started', 'polling-stopped', 'close','payment-success']);
+
 const phoneNumber = ref('');
 const checkoutRequestId = ref('');
-const isPolling = ref(false);
 const transactionResult = ref(null);
 const toast = useToast();
 const userStore = useUserStore();
 const loading = ref(false);
+const isLoading = ref(false);
 
 const closeModal = () => {
-  emit('close');
+  emit('close'); 
 };
 
 const submitPhoneNumber = async () => {
@@ -84,29 +68,40 @@ const submitPhoneNumber = async () => {
   try {
     const data = {
       amount: props.amount,
-      phone_number: phoneNumber.value
+      phone_number: phoneNumber.value,
     };
     const response = await axios.post(`pay-enrollment-fee/${props.eventId}/`, data, {
       headers: {
         Authorization: `Bearer ${userStore.user.access}`,
       },
     });
+    
     if (response.status === 200) {
-      const responseDescription = response.data.ResponseDescription || 'An STK push has been sent to your phone';
+      const responseDescription = response.data.ResponseDescription;
       toast.success(responseDescription);
       checkoutRequestId.value = response.data.CheckoutRequestID;
-      closeModal();
+      closeModal(); 
+      
     } else {
       toast.error(response.data?.error || 'Something went wrong, try later');
     }
   } catch (error) {
-    toast.error('Something went wrong, try later');
+    if (error.response) {
+      toast.error(error.response.data?.error || 'Something went wrong, try later');
+    } else if (error.request) {
+      toast.error('Network error. Please check your connection and try again.');
+    } else {
+      toast.error('An unexpected error occurred. Please try again later.');
+    }
   } finally {
     loading.value = false;
   }
 };
 
+
 const checkTransactionStatus = async () => {
+  if (!checkoutRequestId.value) return;
+
   try {
     const response = await axios.get(`check-transaction-status/${checkoutRequestId.value}/`, {
       headers: {
@@ -120,30 +115,34 @@ const checkTransactionStatus = async () => {
 
     if (resultCode === '0') {
       toast.success(resultDesc || 'Transaction completed successfully');
-      isPolling.value = false;
+      emit('payment-success', props.eventId);
       checkoutRequestId.value = ''; 
+      stopPolling();
     } else if (!resultCode && !resultDesc) {
       console.log('Transaction status not available yet, retrying...');
     } else {
       toast.error(`Transaction failed: ${resultDesc || 'Unknown error'}`);
-      isPolling.value = false;
       checkoutRequestId.value = ''; 
+      stopPolling(); 
     }
   } catch (error) {
     console.error('Polling error:', error);
-    isPolling.value = false;
+    stopPolling();
   }
 };
 
-const { start, clear } = usePolling(checkTransactionStatus, 1000);
+const { start, stop } = usePolling(checkTransactionStatus, 1000, (loadingState) => {
+  isLoading.value = loadingState;
+});
 
 watch(checkoutRequestId, (newValue) => {
   if (newValue) {
-    isPolling.value = true;
+    emit('polling-started');
     start();
   } else {
-    clear();
-    isPolling.value = false;
+    emit('polling-stopped');
+    stop();
   }
-});
+}, { immediate: true });
+
 </script>
