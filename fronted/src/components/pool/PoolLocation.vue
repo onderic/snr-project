@@ -94,7 +94,7 @@ const userStore = useUserStore();
 const loading = useLoading();
 
 const truncatedAddress = computed(() => {
-  const maxLength = 59;
+  const maxLength = 200;
   return address.value.length > maxLength ? address.value.slice(0, maxLength) + '...' : address.value;
 });
 

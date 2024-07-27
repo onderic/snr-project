@@ -18,7 +18,7 @@
           <form @submit.prevent="submitPhoneNumber" class="space-y-4">
             <div>
               <label for="tel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Phone Number</label>
-              <input v-model="phoneNumber" type="tel" name="tel" id="tel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="123-456-7890" required />
+              <input v-model="phoneNumber" type="tel" name="tel" id="tel" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="0798335657" required />
             </div>
             <button type="submit" class="btn flex items-center justify-center" :disabled="loading">
               <v-icon v-if="loading" name="gi-spinning-blades" animation="spin" scale="1" class="mr-2" />

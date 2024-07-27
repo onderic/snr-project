@@ -19,7 +19,7 @@
                     <div class="relative w-7 h-7 overflow-hidden flex rounded-xl">
                       <img src="@/assets/ball.jpeg" alt="">
                     </div>
-                    <div class="inline-flex text-lg font-semibold text-gray-900">
+                    <div class="inline-flex text-lg font-semibold text-white dark:text-gray-900 ">
                         CueScore
                     </div>
                 </a>

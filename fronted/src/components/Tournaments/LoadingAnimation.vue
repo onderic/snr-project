@@ -1,15 +1,16 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center bg-gray-400 dark:bg-gray-800 z-10">
-    <div class="flex flex-col items-center justify-center w-full h-full px-4 py-8">
-      <div class="flex items-center justify-center ">
-        <p class="text-white dark:text-gray-200 text-lg mb-28 font-semibold font-serif ">
-        {{ message }}
-      </p> 
+  <div class="fixed inset-0 flex items-center justify-center bg-gray-800 dark:bg-gray-900 bg-opacity-500 dark:bg-opacity-75">
+    <div class="absolute inset-0 bg-white dark:bg-gray-800 bg-opacity-75 dark:bg-opacity-75 flex items-center justify-center shadow-2xl">
+      <div class="flex flex-col items-center justify-center w-full h-full px-4 py-8 bg-gray-300 dark:bg-gray-900">
+        <div class="flex items-center justify-center">
+          <p class="text-dark dark:text-gray-200 text-lg mb-28 font-semibold font-serif">
+            {{ message }}
+          </p>
+        </div>
+        <div class="relative mb-4">
+          <span class="loader"></span>
+        </div>
       </div>
-      <div class="relative mb-4">
-        <span class="loader"></span>
-      </div>
-      
     </div>
   </div>
 </template>
@@ -29,12 +30,12 @@ const props = defineProps({
   height: 48px;
   position: relative;
 }
-.loader::before , .loader::after{
+.loader::before , .loader::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50% , -50%);
+  transform: translate(-50%, -50%);
   width: 48em;
   height: 48em;
   background-image:
