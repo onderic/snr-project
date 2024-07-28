@@ -88,7 +88,7 @@ class MpesaTransaction(models.Model):
     transaction_date = models.CharField(max_length=255, null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     status = models.CharField(max_length=20, null=True, blank=True)
-    is_processed = models.BooleanField(default=False)
+    is_processed = models.BooleanField(default=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
