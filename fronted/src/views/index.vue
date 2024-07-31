@@ -25,20 +25,22 @@
                 <ul
                     class="border-t border-gray-100  lg:border-t-0 px-6 lg:px-0 pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-3 text-lg text-gray-700 w-full lg:justify-center lg:items-center">
                     <li>
-                        <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
+                        <a href="/" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
                             Home
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
-                            Services
+                     <router-link to="/guide">
+                      <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
+                            User Guide
                         </a>
+                     </router-link>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#" class="duration-300 font-medium ease-linear hover:text-blue-600 py-3">
                             About us
                         </a>
-                    </li>
+                    </li> -->
                     <li>
                       <div>
                   <button
@@ -157,47 +159,47 @@
     </div>
   
   
-  
-    <div class="relative overflow-hidden dark:bg-darker lg:overflow-auto bg-white dark:bg-gray-900">
-    <div class="mx-auto max-w-7xl px-8 md:px-12 lg:px-6 xl:px-0 mb-10 mt-10">
-      <div class="py-12 text-center">
-        <h2 class="text-5xl font-semibold text-gray-800 dark:text-white mb-6 capitalize font-serif">How it works</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Step 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-            <div class="flex justify-center mb-4">
-              <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zM288 288H160C71.63 288 0 359.6 0 448c0 17.67 14.33 32 32 32H416c17.67 0 32-14.33 32-32C448 359.6 376.4 288 288 288zM616 224H568V176C568 167.2 560.8 160 552 160S536 167.2 536 176V224H488C479.2 224 472 231.2 472 240S479.2 256 488 256H536V304C536 312.8 543.2 320 552 320S568 312.8 568 304V256H616C624.8 256 632 248.8 632 240S624.8 224 616 224z"></path>
-              </svg>
+    
+      <div class="relative overflow-hidden dark:bg-darker lg:overflow-auto bg-white dark:bg-gray-900">
+      <div class="mx-auto max-w-7xl px-8 md:px-12 lg:px-6 xl:px-0 mb-10 mt-10">
+        <div class="py-12 text-center">
+          <h2 class="text-5xl font-semibold text-gray-800 dark:text-white mb-6 capitalize font-serif">How it works</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Step 1 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+              <div class="flex justify-center mb-4">
+                <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                  <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zM288 288H160C71.63 288 0 359.6 0 448c0 17.67 14.33 32 32 32H416c17.67 0 32-14.33 32-32C448 359.6 376.4 288 288 288zM616 224H568V176C568 167.2 560.8 160 552 160S536 167.2 536 176V224H488C479.2 224 472 231.2 472 240S479.2 256 488 256H536V304C536 312.8 543.2 320 552 320S568 312.8 568 304V256H616C624.8 256 632 248.8 632 240S624.8 224 616 224z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Create Account</h3>
+              <p class="text-gray-600 dark:text-gray-300">Sign up with your email and get started in no time.</p>
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Create Account</h3>
-            <p class="text-gray-600 dark:text-gray-300">Sign up with your email and get started in no time.</p>
-          </div>
-          <!-- Step 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-            <div class="flex justify-center mb-4">
-              <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor" d="M472 344H328c-6.617 0-12 5.383-12 12v136c0 6.617 5.383 12 12 12h144c6.617 0 12-5.383 12-12V356c0-6.617-5.383-12-12-12zM484 0H124C55.59 0 0 55.59 0 124v264c0 68.41 55.59 124 124 124h144v-96H164v-40h104v-48H164v-40h104v-48H164v-40h104v-48H164V64h232v288h-48v48h48v48h48V64h48v264h40V124C512 55.59 456.4 0 388 0zM256 160c-6.617 0-12 5.383-12 12v176c0 6.617 5.383 12 12 12s12-5.383 12-12V172C268 165.4 262.6 160 256 160zM128 172v176c0 6.617 5.383 12 12 12s12-5.383 12-12V172c0-6.617-5.383-12-12-12S128 165.4 128 172z"></path>
-              </svg>
+            <!-- Step 2 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+              <div class="flex justify-center mb-4">
+                <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="upload" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path fill="currentColor" d="M472 344H328c-6.617 0-12 5.383-12 12v136c0 6.617 5.383 12 12 12h144c6.617 0 12-5.383 12-12V356c0-6.617-5.383-12-12-12zM484 0H124C55.59 0 0 55.59 0 124v264c0 68.41 55.59 124 124 124h144v-96H164v-40h104v-48H164v-40h104v-48H164v-40h104v-48H164V64h232v288h-48v48h48v48h48V64h48v264h40V124C512 55.59 456.4 0 388 0zM256 160c-6.617 0-12 5.383-12 12v176c0 6.617 5.383 12 12 12s12-5.383 12-12V172C268 165.4 262.6 160 256 160zM128 172v176c0 6.617 5.383 12 12 12s12-5.383 12-12V172c0-6.617-5.383-12-12-12S128 165.4 128 172z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Browse Pools</h3>
+              <p class="text-gray-600 dark:text-gray-300">Easily upload your Pools to showcase your skills and experience.</p>
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Upload Resume</h3>
-            <p class="text-gray-600 dark:text-gray-300">Easily upload your resume to showcase your skills and experience.</p>
-          </div>
-          <!-- Step 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
-            <div class="flex justify-center mb-4">
-              <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor" d="M505 442.7L405.3 343C418.9 317.9 426.3 290 426.3 260.5C426.3 117.3 334.3 25.3 191.1 25.3S-44 117.3-44 260.5C-44 403.7 47.9 495.7 191.1 495.7C220.6 495.7 248.5 488.3 273.6 474.7L373.3 574.4C377.6 578.7 384.5 578.7 388.9 574.4L504.4 459C508.8 454.7 508.8 447.8 505 442.7zM191.1 426.3C105.4 426.3 38.3 359.2 38.3 273.5C38.3 187.8 105.4 120.7 191.1 120.7C276.8 120.7 343.9 187.8 343.9 273.5C343.9 359.2 276.8 426.3 191.1 426.3z"></path>
-              </svg>
+            <!-- Step 3 -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+              <div class="flex justify-center mb-4">
+                <svg class="w-12 h-12 text-blue-500" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path fill="currentColor" d="M505 442.7L405.3 343C418.9 317.9 426.3 290 426.3 260.5C426.3 117.3 334.3 25.3 191.1 25.3S-44 117.3-44 260.5C-44 403.7 47.9 495.7 191.1 495.7C220.6 495.7 248.5 488.3 273.6 474.7L373.3 574.4C377.6 578.7 384.5 578.7 388.9 574.4L504.4 459C508.8 454.7 508.8 447.8 505 442.7zM191.1 426.3C105.4 426.3 38.3 359.2 38.3 273.5C38.3 187.8 105.4 120.7 191.1 120.7C276.8 120.7 343.9 187.8 343.9 273.5C343.9 359.2 276.8 426.3 191.1 426.3z"></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Find Tournaments</h3>
+              <p class="text-gray-600 dark:text-gray-300">Search for tournaments that match your qualifications and apply directly.</p>
             </div>
-            <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">Find Job</h3>
-            <p class="text-gray-600 dark:text-gray-300">Search for jobs that match your qualifications and apply directly.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  
+    
   
   
     <div class="relative overflow-hidden dark:bg-darker lg:overflow-auto mb-10">

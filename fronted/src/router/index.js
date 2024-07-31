@@ -16,6 +16,7 @@ import Register from '@/views/auth/register.vue';
 import AdminDashboard from '@/views/Admin/Dashboard.vue';
 import OwenrDashboard from '@/views/owner/Dashboard.vue';
 import Home from '@/views/index.vue';
+import Guide from '@/views/guide.vue';
 
 import { useUserStore } from '@/stores/user'; 
 
@@ -26,6 +27,11 @@ const router = createRouter({
       path: "",
       name: "/",
       component: Home
+    },
+    {
+      path: "/guide",
+      name: "guide",
+      component: Guide
     },
     {
       path: "/auth/login",

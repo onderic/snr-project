@@ -74,8 +74,8 @@ addIcons(CoHome,
     IoCreate
 );
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
-// axios.defaults.baseURL = 'https://8df5-41-89-162-2.ngrok-free.app/api/v1/'
+// axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
+axios.defaults.baseURL = 'https://snr.com.my-wellness.co/api/v1/'
 
 const app = createApp(App)
 
