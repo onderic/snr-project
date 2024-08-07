@@ -29,6 +29,7 @@ urlpatterns = [
     path('pay-enrollment-fee/<uuid:id>/', api.pay_enrollment_fee, name='pay_enrollment_fee'),
     path('mpesa-callback/', api.mpesa_callback, name='mpesa-callback'),
     path('check-transaction-status/<str:checkout_request_id>/', api.check_transaction_status, name='check_transaction_status'),
+    path('transactions/', api.list_transactions, name='list_transactions'),
 
     path('revenue-overview/', api.revenue_overview, name='revenue_overview'),
     path('revenue-overview-graph/', api.daily_revenue_graph, name='revenue_overview'),

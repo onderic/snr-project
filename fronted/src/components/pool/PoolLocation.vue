@@ -170,6 +170,7 @@ async function submitForm() {
     console.log('Response:', response.data);
     toast.success('Pool space created successfully pending approval');
     router.push('/manage-pool');
+    userStore.updateUserRole('owner');
   } catch (error) {
     console.error('Error creating event:', error);
     toast.error('Something went wrong');

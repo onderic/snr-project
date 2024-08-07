@@ -71,7 +71,7 @@
            
               </ul>
           </div>
-        <div  v-if="isAuthenticated" class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
+        <div v-if="userStore.user.role =='owner'"  class="font-medium text-sm text-black border-t pt-3 mt-10 dark:text-white dark:border-slate-800">
             <h1 class="mb-3 font-semibold ">Owner</h1>
               <ul>
                 <li>

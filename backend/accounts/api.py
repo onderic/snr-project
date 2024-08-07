@@ -9,15 +9,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-
 @api_view(['GET'])
 def user(request):
     return JsonResponse({
-        'id': request.user.id,
+        'id': str(request.user.id), 
         'name': request.user.name,
         'role': request.user.role,
+        'owner': request.user.is_owner
     })
-
 
 @api_view(['POST'])
 @authentication_classes([])

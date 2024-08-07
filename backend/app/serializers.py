@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from accounts.models import User
-from .models import PoolSpace, Tournament, Enrollment
+from .models import MpesaTransaction, PoolSpace, Tournament, Enrollment
 
 class PoolSpaceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,3 +36,8 @@ class EnrollmentWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Enrollment
         fields = '__all__'
+
+class MpesaTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MpesaTransaction
+        fields = '__all__' 

@@ -73,12 +73,12 @@
   <style scoped>
   .relative {
     width: 100%;
-    height: 100%; /* Make sure the container takes the full available height */
+    height: 100%; 
   }
   
   canvas {
-    width: 100% !important; /* Make sure the canvas scales with the container */
-    height: auto !important; /* Maintain aspect ratio */
+    width: 100% !important; 
+    height: auto !important;
   }
   
   @media (min-width: 1024px) {

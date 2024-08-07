@@ -10,17 +10,18 @@ from .models import Enrollment, MpesaTransaction
 
 load_dotenv()
 
+
 class LipaNaMpesa:
     def __init__(self) -> None:
         self.now = datetime.now()
-        self.shortcode = os.getenv("SHORTCODE")
-        self.consumer_key = os.getenv("CONSUMER_KEY")
-        self.consumer_secret = os.getenv("CONSUMER_SECRET")
-        self.passkey = os.getenv("PASS_KEY")
-        self.access_token_url = os.getenv("ACCESS_TOKEN_API")
-        self.stk_push_url = os.getenv("STK_PUSH_API")
+        self.shortcode = "174379"
+        self.consumer_key = "stRGGFdT68FKEW0lH9wxXte2cQmLVoFS8sVHDCE2mtkYxVei"
+        self.consumer_secret = "6bfXFtk67G4w6XWzlrZo89WF4mzihq4nK09MWQWGqzSaFGMGdwh5wDHGpEikuGlO"
+        self.passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
+        self.access_token_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+        self.stk_push_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         self.access_token = None
-        self.call_back = os.getenv("CALLBACK_URL")
+        self.call_back = "https://62d5-41-89-162-2.ngrok-free.app"
         self.access_token_expiration = 0
         self.headers = None  
 
@@ -57,6 +58,7 @@ class LipaNaMpesa:
         password_str = self.shortcode + self.passkey + timestamp
         password_bytes = password_str.encode()
         return base64.b64encode(password_bytes).decode("utf-8")
+    
     
     def stk_push(self, payload):
         amount = payload['amount']

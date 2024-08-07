@@ -24,22 +24,26 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_owner', True)
         extra_fields.setdefault('is_superuser', True)
         return self._create_user(name, email, password, **extra_fields)
-
+    
 
 class User(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = [
+        ('superuser', 'Superuser'),
+        ('owner', 'Owner'),
+        ('user', 'User'),
+    ]
+    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, blank=True, null=True, default='')
-    phone_number = models.CharField(max_length=40, blank=True, null=True,)
-    first_name = models.CharField(max_length=255,blank=True, null=True,)
-    last_name = models.CharField(max_length=255,blank=True, null=True,)
-  
+    phone_number = models.CharField(max_length=40, blank=True, null=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
     user_avatar = models.ImageField(upload_to='user_avatars', blank=True, null=True)
-
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_owner = models.BooleanField(default=False)
-
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(blank=True, null=True)
 
@@ -55,10 +59,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         return ''
 
     @property
-    def role(self):
+    def role_display(self):
         if self.is_superuser:
             return 'superuser'
         if self.is_owner:
             return 'owner'
         return 'user'
-        

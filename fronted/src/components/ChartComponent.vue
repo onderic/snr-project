@@ -24,10 +24,10 @@
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: chartData.value.labels,
+          labels: ["Monday","Tuesday","Wendsday", "Thursday", "Friday"],
           datasets: [{
             label: 'Total Revenue (KES)',
-            data: chartData.value.data,
+            data: ['255','900','300','500', '800'],
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1

@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer
+from .serializers import EnrollmentReadSerializer, EnrollmentWriteSerializer, PoolSpaceSerializer,TournamentSerializer,MpesaTransactionSerializer
 from .models import Enrollment, MpesaTransaction, PoolSpace,Tournament
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from geopy.distance import geodesic
@@ -16,7 +16,31 @@ from rest_framework.response import Response
 from .utils import get_totals  
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 
+import logging
 
+# Set up logging
+logger = logging.getLogger('app')
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_transactions(request):
+    try:
+        # Fetch all transactions
+        transactions = MpesaTransaction.objects.all()
+
+        # Serialize the data
+        serializer = MpesaTransactionSerializer(transactions, many=True)
+
+        # Log the request and response
+        logger.debug("Fetching all transactions")
+        logger.debug(f"Transactions found: {serializer.data}")
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        logger.error(f"Error occurred while fetching transactions: {str(e)}")
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def pool_spaces(request):
@@ -110,12 +134,32 @@ def update_pool_space(request, pk):
 
 @api_view(['POST'])
 @authentication_classes([])
-@permission_classes([])
+@permission_classes([]) 
 def create_pool_space(request):
+    print("Received request data:", request.data)
+    
     serializer = PoolSpaceSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        pool_space = serializer.save()
+        
+        user_id = request.data.get('user')
+    
+        
+        if user_id:
+            try:
+                user = User.objects.get(id=user_id)
+             
+                user.role = 'owner'
+                user.save()
+               
+                
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except User.DoesNotExist:
+                
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+
+            return Response({'error': 'User ID not provided'}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

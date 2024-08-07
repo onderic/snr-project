@@ -1,4 +1,3 @@
-
 import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore({
@@ -63,7 +62,12 @@ export const useUserStore = defineStore({
       localStorage.setItem('user.name', this.user.name);
     },
 
-     // refreshToken() {
+    updateUserRole(role) {
+      this.user.role = role;
+      localStorage.setItem('user.role', role);
+    },
+
+    // refreshToken() {
     //   axios
     //     .post('/api/v1/refresh/', {
     //       refresh: this.user.refresh,
